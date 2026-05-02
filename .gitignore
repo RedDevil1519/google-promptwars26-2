@@ -1,0 +1,49 @@
+# ──────────────────────────────────────────────────
+# Voter Protocol Engine — .gitignore
+# ──────────────────────────────────────────────────
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+frontend/dist/
+backend/dist/
+
+# Environment secrets — NEVER commit
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Vite / cache
+.vite/
+frontend/.vite/
+
+# Antigravity agent artifacts
+.antigravity/
