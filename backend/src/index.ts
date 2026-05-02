@@ -2,9 +2,11 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import civicRouter from './routes/civic';
-
 import translateRouter from './routes/translate';
+import explainRouter from './routes/explain';
+import indiaRouter from './routes/india';
 
 // Load environment variables from .env file before any other code
 dotenv.config();
@@ -36,9 +38,13 @@ app.use(
  * CORS: allow requests only from the Vite dev server in development.
  * In production, replace with your actual domain.
  */
+const allowedOrigins = [
+  process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173',
+  /\.run\.app$/, // Allow all Cloud Run service URLs
+];
 app.use(
   cors({
-    origin: process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
   })
@@ -58,9 +64,24 @@ app.get('/health', (_req, res) => {
 // Mount the API proxy routers
 app.use('/api/civic', civicRouter);
 app.use('/api/translate', translateRouter);
+app.use('/api/explain', explainRouter);
+app.use('/api/india', indiaRouter);
 
-// 404 handler for unmatched routes
-app.use((_req, res) => {
+// Serve frontend static files in production
+const frontendPath = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(frontendPath));
+
+// Fallback all other GET requests to the frontend index.html for React Router
+app.get('*', (req, res, next) => {
+  if (req.method === 'GET' && !req.path.startsWith('/api/')) {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  } else {
+    next();
+  }
+});
+
+// 404 handler for unmatched API routes
+app.use('/api/*', (_req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 

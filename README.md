@@ -1,3 +1,5 @@
+![Voter Protocol Architecture Diagram](./architecture.png)
+
 <p align="center">
   <img src="https://img.shields.io/badge/Voter%20Protocol-Election%20Engine-00d4ff?style=for-the-badge&labelColor=0a0e1a" alt="Voter Protocol Engine" />
 </p>
@@ -34,13 +36,17 @@
 | Feature | Description |
 |---------|-------------|
 | 🗳️ **Real-Time Civic Data** | Localized election lookup powered by the **Google Civic Information API** |
-| 📅 **Google Calendar Sync** | One-click deep link to add any election deadline as a pre-filled Calendar event |
-| 🗺️ **Polling Location Map** | Google Maps embed showing the user's exact polling place |
+| 🇮🇳 **International Fallback Engine** | Detects Indian addresses via **Geocoding API** and generates ECI-compliant data with **Gemini AI** |
+| 📅 **Google Calendar Sync** | Phase 3 "Add Election Day to Calendar" + per-step deadline reminders using template deep-links |
+| 🗺️ **Street View Reconnaissance** | Google Maps Embed **Street View** panorama of the exact polling place address |
+| 🤖 **Gemini AI Explainer** | "Decrypt Term" button uses **Gemini 1.5 Flash** to give an ELI5 definition of any civic term |
+| 🌐 **Multi-Language Engine** | Language selector instantly translates the Roadmap to Hindi & Spanish via **Cloud Translation API** |
+| 📲 **PWA Offline Mode** | Installable Progressive Web App with Workbox service worker — works fully offline |
 | 🔒 **Security-First** | Helmet headers · DOMPurify XSS sanitization · zero hardcoded secrets |
-| ⚡ **Zero-Waste Performance** | 24-hour localStorage API cache · React `lazy()` + `Suspense` code splitting |
+| ⚡ **Zero-Waste Performance** | 24-hour localStorage API cache · React `lazy()` + `Suspense` code splitting · ~306 KB bundle |
 | ♿ **Full Accessibility** | WCAG 2.1 AA · 100% keyboard navigation · comprehensive ARIA roles |
 | 🛡️ **Input Validation** | Server-side regex + length guards on all incoming addresses |
-| 🧪 **Automated Testing** | Vitest unit tests · React Testing Library component tests |
+| 🧪 **Automated Testing** | 82 Vitest unit + RTL component tests across 5 test files |
 
 ---
 
@@ -156,6 +162,9 @@ A `<Maps Embed>` iframe renders the user's polling place. Using the **Street Vie
 ### 4. Google Cloud Translation API
 The **Multi-Language Engine** allows users to instantly translate the entire Voter Roadmap (including complex civic terminology) into Hindi and Spanish, improving civic engagement for non-native English speakers.
 
+### 5. Google Gemini AI (`gemini-1.5-flash`)
+The **Decrypt Term** feature integrates the `@google/generative-ai` SDK on the backend. A "Decrypt Term" button appears on every roadmap step. When clicked, it sends the civic term to the `/api/explain` endpoint, which queries Gemini with a structured ELI5 prompt and returns a concise plain-English explanation — making civic terminology accessible to every voter.
+
 ---
 
 ## ♿ Accessibility (WCAG 2.1 AA)
@@ -269,6 +278,8 @@ cd backend  && npm run build   # → backend/dist/
 |----------|:--------:|-------------|
 | `CIVIC_API_KEY` | ✅ | Google Civic Information API key (server-side only) |
 | `MAPS_EMBED_KEY` | ☐ | Google Maps Embed API key (server-side) |
+| `TRANSLATION_API_KEY` | ☐ | Google Cloud Translation API key (server-side) |
+| `GEMINI_API_KEY` | ☐ | Google Gemini API key for the Decrypt Term AI feature |
 | `PORT` | ☐ | Backend port (default: `4000`) |
 | `VITE_API_BASE_URL` | ✅ | URL of the Express backend, exposed to Vite |
 | `VITE_MAPS_EMBED_KEY` | ☐ | Maps key exposed to the browser for the embed iframe |
