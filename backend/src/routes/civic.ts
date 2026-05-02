@@ -145,7 +145,7 @@ Generate a JSON object with EXACTLY this structure — no extra text, markdown, 
  *
  * @param location - City or locality
  * @param state - State
- * @param geminiKey - GEMINI_API_KEY
+ * @param geminiKey - GEMINI_API_KEY from process.env
  * @returns Parsed IndiaElectionData, or throws on parse failure
  */
 async function fetchIndiaDataFromGemini(
@@ -168,23 +168,87 @@ async function fetchIndiaDataFromGemini(
   return JSON.parse(jsonText) as IndiaElectionData;
 }
 
+// ── India keyword fail-safe ────────────────────────────────────────────────────
+
+/**
+ * INDIA_KEYWORD_PATTERN
+ *
+ * Regex matching well-known Indian states, cities, or "India" / "IN".
+ *
+ * This is the **synchronous fail-safe** that fires BEFORE any API call is made.
+ * It guarantees Indian addresses can never accidentally reach the US Civic API
+ * even when the Geocoding key is missing or returns an unexpected result.
+ */
+const INDIA_KEYWORD_PATTERN =
+  /\b(india|odisha|bhubaneswar|delhi|new\s+delhi|mumbai|bombay|bangalore|bengaluru|hyderabad|chennai|madras|kolkata|calcutta|pune|ahmedabad|jaipur|lucknow|kanpur|nagpur|patna|indore|thane|bhopal|visakhapatnam|surat|vadodara|ludhiana|agra|nashik|faridabad|meerut|rajkot|maharashtra|karnataka|tamil\s+nadu|west\s+bengal|gujarat|rajasthan|uttar\s+pradesh|bihar|madhya\s+pradesh|andhra\s+pradesh|telangana|kerala|punjab|haryana|assam|jharkhand|uttarakhand|chhattisgarh|jammu|kashmir|goa|manipur|meghalaya|mizoram|nagaland|sikkim|tripura|arunachal)\b/i;
+
+/**
+ * Returns true if the address string matches any known Indian keyword.
+ * Case-insensitive. Checks whole words only (word boundary anchors).
+ *
+ * @param address - The sanitized address string
+ * @returns true if the address is recognisably Indian
+ */
+function isIndianKeyword(address: string): boolean {
+  return INDIA_KEYWORD_PATTERN.test(address);
+}
+
+/**
+ * Shared response helper: runs Gemini ECI synthesis and sends the
+ * IndiaApiResponse JSON. Called from both Layer 1 and Layer 2.
+ *
+ * @param res - Express response object
+ * @param geminiKey - GEMINI_API_KEY
+ * @param locationName - Resolved city/locality (or raw address as fallback)
+ * @param stateName - Resolved state name (may be empty string)
+ * @param coordinates - Geocoded lat/lng or null when geocoding was skipped
+ * @param formattedAddress - Geocoded formatted address or raw input
+ */
+async function sendIndiaGeminiResponse(
+  res: Response,
+  geminiKey: string,
+  locationName: string,
+  stateName: string,
+  coordinates: { lat: number; lng: number } | null,
+  formattedAddress: string
+): Promise<void> {
+  console.log(
+    `[Civic Route] ► GEMINI PATH — location="${locationName}", state="${stateName}", coords=${coordinates ? JSON.stringify(coordinates) : 'none'}`
+  );
+
+  const electionData = await fetchIndiaDataFromGemini(locationName, stateName, geminiKey);
+
+  res.status(200).json({
+    indiaFallback: true,
+    electionData,
+    coordinates,
+    formattedAddress,
+  });
+}
+
 // ── Route ─────────────────────────────────────────────────────────────────────
 
 /**
  * GET /api/civic
  *
- * Smart address resolver with Indian constituency bypass:
+ * Bulletproof address resolver with three-layer India detection:
  *
- * 1. Validates the incoming address (via validateAddress middleware).
- * 2. Attempts to geocode the address using the Google Maps Geocoding API.
- * 3. **If the geocoding result has country_code = "IN" (India)**:
- *    - Immediately bypasses the Google Civic Information API.
- *    - Calls Gemini 1.5 Flash to synthesise ECI-compliant election data.
- *    - Returns an `indiaFallback: true` response.
- * 4. Otherwise, proceeds with the standard US Civic Information API flow.
+ * **LAYER 1 — Synchronous keyword pre-check (zero API calls):**
+ *   If the address contains any known Indian city/state name or "India",
+ *   immediately route to the Gemini ECI synthesis engine.
+ *   Guarantees Indian addresses NEVER reach the US Civic API.
+ *
+ * **LAYER 2 — Geocoding API country check (async, authoritative):**
+ *   For addresses that passed Layer 1, geocode and check country_code = "IN".
+ *   If India is confirmed, route to Gemini with precise geocoded location.
+ *
+ * **LAYER 3 — US Google Civic Information API:**
+ *   Only reached when both Layer 1 and Layer 2 confirmed a non-India address.
+ *
+ * All decision points emit console.log() for Cloud Run log visibility.
  *
  * @query address - The voter's address string (validated by middleware)
- * @returns CivicVoterInfo, fallback elections list, or India Gemini data
+ * @returns CivicVoterInfo, fallback elections list, or IndiaApiResponse
  */
 router.get('/', validateAddress, async (req: Request, res: Response): Promise<void> => {
   const civicReq = req as CivicRequest;
@@ -193,71 +257,139 @@ router.get('/', validateAddress, async (req: Request, res: Response): Promise<vo
   const geocodingKey = process.env.GEOCODING_API_KEY ?? civicKey;
   const geminiKey = process.env.GEMINI_API_KEY;
 
+  // ── Audit log: always show the raw input ──────────────────────────────────
+  console.log(`[Civic Route] ► Incoming address: "${address}"`);
+
   if (!civicKey) {
-    console.error('[Civic Route] CIVIC_API_KEY is not set in environment.');
+    console.error('[Civic Route] ✗ CIVIC_API_KEY is not set in environment.');
     res.status(500).json({
       error: 'Server configuration error: Civic API key is missing. Check .env setup.',
     });
     return;
   }
 
-  // ── Step 1: Geocode to detect country ─────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+  // LAYER 1: Synchronous keyword pre-check — zero latency, zero API calls
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (isIndianKeyword(address)) {
+    console.log(
+      `[Civic Route] ► LAYER 1 HIT (keyword): "${address}" → INDIA path. Geocoding + Civic APIs skipped.`
+    );
+
+    if (!geminiKey) {
+      console.error('[Civic Route] ✗ GEMINI_API_KEY missing — cannot serve India data.');
+      res.status(500).json({
+        error: 'GEMINI_API_KEY is not configured. Cannot serve India election data.',
+      });
+      return;
+    }
+
+    // Best-effort geocoding for lat/lng enrichment (does not block the path)
+    let locationName = address;
+    let stateName = '';
+    let coordinates: { lat: number; lng: number } | null = null;
+    let formattedAddress = address;
+
+    if (geocodingKey) {
+      const geoResult = await geocodeAddress(address, geocodingKey);
+      if (geoResult) {
+        coordinates = {
+          lat: geoResult.geometry.location.lat,
+          lng: geoResult.geometry.location.lng,
+        };
+        formattedAddress = geoResult.formatted_address;
+        locationName =
+          getComponent(geoResult, 'locality') ??
+          getComponent(geoResult, 'administrative_area_level_2') ??
+          address;
+        stateName = getComponent(geoResult, 'administrative_area_level_1') ?? '';
+        console.log(
+          `[Civic Route] ► Layer 1 geocode enrichment: "${locationName}", "${stateName}", ${JSON.stringify(coordinates)}`
+        );
+      } else {
+        console.warn(
+          `[Civic Route] ⚠ Layer 1 geocoding returned no result for "${address}" — using raw address for Gemini prompt.`
+        );
+      }
+    }
+
+    try {
+      await sendIndiaGeminiResponse(res, geminiKey, locationName, stateName, coordinates, formattedAddress);
+    } catch (indiaErr) {
+      console.error('[Civic Route] ✗ Gemini synthesis failed (Layer 1):', indiaErr);
+      res.status(500).json({ error: 'Failed to generate India election data. Please try again.' });
+    }
+    return;
+  }
+
+  console.log(`[Civic Route] ► LAYER 1 MISS (no India keyword). Proceeding to Geocoding API.`);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // LAYER 2: Geocoding API country check
+  // ═══════════════════════════════════════════════════════════════════════════
   if (geocodingKey) {
     const geoResult = await geocodeAddress(address, geocodingKey);
 
-    if (geoResult && isInIndia(geoResult)) {
-      // ── Step 2: India path — bypass Civic API, use Gemini ───────────────
-      console.log(`[Civic Route] India address detected: "${address}" → Gemini ECI synthesis`);
+    if (geoResult) {
+      const countryCode =
+        geoResult.address_components.find((c) => c.types.includes('country'))?.short_name ??
+        'unknown';
+      console.log(
+        `[Civic Route] ► Geocoded: "${geoResult.formatted_address}" — country_code="${countryCode}"`
+      );
 
-      if (!geminiKey) {
-        res.status(500).json({
-          error: 'GEMINI_API_KEY is not configured. Cannot serve India election data.',
-        });
-        return;
-      }
+      if (isInIndia(geoResult)) {
+        console.log(
+          `[Civic Route] ► LAYER 2 HIT (geocode): country_code=IN for "${address}" → INDIA path.`
+        );
 
-      try {
+        if (!geminiKey) {
+          res.status(500).json({
+            error: 'GEMINI_API_KEY is not configured. Cannot serve India election data.',
+          });
+          return;
+        }
+
         const locationName =
           getComponent(geoResult, 'locality') ??
           getComponent(geoResult, 'administrative_area_level_2') ??
           address;
-        const stateName =
-          getComponent(geoResult, 'administrative_area_level_1') ?? '';
+        const stateName = getComponent(geoResult, 'administrative_area_level_1') ?? '';
+        const coordinates = {
+          lat: geoResult.geometry.location.lat,
+          lng: geoResult.geometry.location.lng,
+        };
 
-        const electionData = await fetchIndiaDataFromGemini(locationName, stateName, geminiKey);
-
-        res.status(200).json({
-          indiaFallback: true,
-          electionData,
-          coordinates: {
-            lat: geoResult.geometry.location.lat,
-            lng: geoResult.geometry.location.lng,
-          },
-          formattedAddress: geoResult.formatted_address,
-        });
-        return;
-      } catch (indiaErr) {
-        console.error('[Civic Route] Gemini India synthesis failed:', indiaErr);
-        res.status(500).json({
-          error: 'Failed to generate India election data. Please try again.',
-        });
+        try {
+          await sendIndiaGeminiResponse(res, geminiKey, locationName, stateName, coordinates, geoResult.formatted_address);
+        } catch (indiaErr) {
+          console.error('[Civic Route] ✗ Gemini synthesis failed (Layer 2):', indiaErr);
+          res.status(500).json({ error: 'Failed to generate India election data. Please try again.' });
+        }
         return;
       }
+
+      console.log(`[Civic Route] ► LAYER 2 MISS (country_code="${countryCode}"). Proceeding to US Civic API.`);
+    } else {
+      console.warn(`[Civic Route] ⚠ Geocoding returned no result for "${address}" — proceeding to US Civic API.`);
     }
+  } else {
+    console.warn(`[Civic Route] ⚠ No geocoding key available — skipping Layer 2.`);
   }
 
-  // ── Step 3: US path — standard Google Civic Information API ───────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+  // LAYER 3: US Google Civic Information API
+  // ═══════════════════════════════════════════════════════════════════════════
+  console.log(`[Civic Route] ► LAYER 3: US Civic API for "${address}".`);
+
   try {
     const voterInfoUrl = `${CIVIC_API_BASE}/voterinfo`;
     const voterInfoResponse = await axios.get(voterInfoUrl, {
-      params: {
-        key: civicKey,
-        address,
-        electionId: '2000',
-      },
+      params: { key: civicKey, address, electionId: '2000' },
       timeout: 10_000,
     });
 
+    console.log(`[Civic Route] ✓ US Civic API success for "${address}".`);
     res.status(200).json(voterInfoResponse.data);
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
@@ -271,20 +403,21 @@ router.get('/', validateAddress, async (req: Request, res: Response): Promise<vo
             params: { key: civicKey },
             timeout: 10_000,
           });
+          console.log(`[Civic Route] ✓ Returning elections fallback list for "${address}".`);
           res.status(200).json({
             fallback: true,
             elections: electionsResponse.data.elections ?? [],
           });
           return;
         } catch (fallbackErr) {
-          console.error('[Civic Route] Fallback elections fetch failed:', fallbackErr);
+          console.error('[Civic Route] ✗ Fallback elections fetch failed:', fallbackErr);
         }
       }
 
-      console.error(`[Civic Route] Civic API error ${status}: ${message}`);
+      console.error(`[Civic Route] ✗ Civic API error ${status}: ${message}`);
       res.status(status).json({ error: message });
     } else {
-      console.error('[Civic Route] Unexpected error:', err);
+      console.error('[Civic Route] ✗ Unexpected error:', err);
       res.status(500).json({ error: 'An unexpected error occurred.' });
     }
   }
