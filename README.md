@@ -4,319 +4,354 @@
   <img src="https://img.shields.io/badge/Voter%20Protocol-Election%20Engine-00d4ff?style=for-the-badge&labelColor=0a0e1a" alt="Voter Protocol Engine" />
 </p>
 
-<h1 align="center">🏛️ Voter Protocol: Interactive Election Engine</h1>
+<h1 align="center">🏛️ Voter Protocol Engine</h1>
 
 <p align="center">
-  <strong>Empowering citizens through visual logic, real-time civic data, and seamless Google service integration.</strong>
+  <strong>A full-stack, AI-powered civic platform that generates personalised voter roadmaps — for any address on Earth.</strong>
   <br/>
-  <em>Find your elections · Navigate your voter roadmap · Sync deadlines to Google Calendar</em>
+  <em>Google Civic API (US) · Gemini AI Fallback (India/International) · PWA Offline · WCAG 2.1 AA</em>
 </p>
 
 <p align="center">
-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"/></a>
-  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-5.x-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite"/></a>
-  <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-18.x-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/></a>
-  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node-20.x-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node"/></a>
-  <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-4.x-000000?style=flat-square&logo=express&logoColor=white" alt="Express"/></a>
-  <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Vitest-tested-6E9F18?style=flat-square&logo=vitest&logoColor=white" alt="Vitest"/></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"/></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-PWA-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite PWA"/></a>
+  <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node-20-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node"/></a>
+  <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white" alt="Express"/></a>
+  <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Tests-82%20passing-6E9F18?style=flat-square&logo=vitest&logoColor=white" alt="Tests"/></a>
   <img src="https://img.shields.io/badge/WCAG-2.1%20AA-00c853?style=flat-square" alt="WCAG 2.1 AA"/>
-  <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"/>
+  <img src="https://img.shields.io/badge/PWA-Installable-5A0FC8?style=flat-square&logo=pwa" alt="PWA"/>
 </p>
 
 ---
 
-## 📌 Project Vision
+## 📌 Project Submission: Voter Protocol Engine
 
-**Voter Protocol** transforms the complex election cycle into a procedural, kinetic journey. It is designed to empower citizens through visual logic, deep Google Service integration, and an uncompromising focus on **accessibility** and **performance**. Democracy functions best when every citizen can navigate it with confidence — and this platform is the bridge.
+### Vertical: Civic Technology / Election Education
 
----
+**Voter Protocol** transforms the complex election cycle into a kinetic, four-phase voter roadmap. It is the first civic platform that serves **both US voters** (via the Google Civic Information API) and **Indian voters** (via a Gemini AI fallback synthesizing Election Commission of India data) — all within the same seamless UI, using the same four-phase roadmap framework.
 
-## ✨ Feature Highlights
-
-| Feature | Description |
-|---------|-------------|
-| 🗳️ **Real-Time Civic Data** | Localized election lookup powered by the **Google Civic Information API** |
-| 🇮🇳 **International Fallback Engine** | Detects Indian addresses via **Geocoding API** and generates ECI-compliant data with **Gemini AI** |
-| 📅 **Google Calendar Sync** | Phase 3 "Add Election Day to Calendar" + per-step deadline reminders using template deep-links |
-| 🗺️ **Street View Reconnaissance** | Google Maps Embed **Street View** panorama of the exact polling place address |
-| 🤖 **Gemini AI Explainer** | "Decrypt Term" button uses **Gemini 1.5 Flash** to give an ELI5 definition of any civic term |
-| 🌐 **Multi-Language Engine** | Language selector instantly translates the Roadmap to Hindi & Spanish via **Cloud Translation API** |
-| 📲 **PWA Offline Mode** | Installable Progressive Web App with Workbox service worker — works fully offline |
-| 🔒 **Security-First** | Helmet headers · DOMPurify XSS sanitization · zero hardcoded secrets |
-| ⚡ **Zero-Waste Performance** | 24-hour localStorage API cache · React `lazy()` + `Suspense` code splitting · ~306 KB bundle |
-| ♿ **Full Accessibility** | WCAG 2.1 AA · 100% keyboard navigation · comprehensive ARIA roles |
-| 🛡️ **Input Validation** | Server-side regex + length guards on all incoming addresses |
-| 🧪 **Automated Testing** | 82 Vitest unit + RTL component tests across 5 test files |
+The platform is built on a strict foundation of: zero `any` types in TypeScript, WCAG 2.1 AA accessibility, server-side API key security, PWA offline capability, and 82 automated tests.
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-google-promptwars26-2/
-│
-├── frontend/                        # Vite + React + TypeScript SPA
-│   └── src/
-│       ├── features/
-│       │   ├── civic/
-│       │   │   ├── hooks/
-│       │   │   │   ├── useCivicData.ts        # Fetches & caches civic data
-│       │   │   │   └── useCalendarSync.ts     # Generates Google Calendar links
-│       │   │   ├── components/
-│       │   │   │   ├── ElectionCard.tsx       # Single election display
-│       │   │   │   └── RoadmapStepper.tsx     # Step-by-step voter roadmap
-│       │   │   └── types.ts                   # Civic API type definitions
-│       │   └── search/
-│       │       └── components/
-│       │           └── AddressSearch.tsx      # DOMPurify-sanitized address input
-│       ├── shared/
-│       │   ├── components/
-│       │   │   ├── Button.tsx
-│       │   │   ├── Spinner.tsx
-│       │   │   └── ErrorBoundary.tsx
-│       │   └── utils/
-│       │       ├── dateParser.ts              # Date formatting (unit-tested)
-│       │       ├── cache.ts                   # 24-hour localStorage cache
-│       │       └── sanitize.ts               # DOMPurify wrapper
-│       ├── pages/
-│       │   ├── HomePage.tsx                  # Landing + address search
-│       │   └── ElectionPage.tsx              # Results + roadmap + map
-│       ├── App.tsx                           # Router with React.lazy()
-│       ├── main.tsx                          # React root with Suspense
-│       └── index.css                         # Cyber-Civic dark theme
-│
-└── backend/                         # Node + Express API proxy
-    └── src/
-        ├── routes/
-        │   └── civic.ts             # /api/civic — Civic API proxy
-        ├── middleware/
-        │   └── validate.ts          # Input sanitization middleware
-        └── index.ts                 # App entry: Helmet, CORS, dotenv
+User Input (Address)
+        │
+        ▼
+ Express Backend (Node 20)
+        │
+        ├── Google Maps Geocoding API ──► country_code = 'IN'?
+        │                                       │
+        │                    ┌──── YES ──────────┘
+        │                    │
+        │           Gemini 1.5 Flash (ECI Data Synthesis)
+        │           → structured JSON: constituency, electionType,
+        │             voterRegistrationSteps, 4-phase descriptions
+        │                    │
+        │                    └──── NO ──────────────┐
+        │                                           │
+        │                              Google Civic Information API
+        │                              → voterInfoQuery / elections
+        │
+        ▼
+   IndiaApiResponse OR CivicVoterInfo
+   (mapped to same UI shape by indiaMapper.ts)
+        │
+        ▼
+ React Frontend (Vite + PWA)
+        │
+        ├── 4-Phase Roadmap (RoadmapStepper)
+        │     ├── Phase 1: Authorization  [🔍 Decrypt Term via Gemini]
+        │     ├── Phase 2: Intelligence   [🔍 Decrypt Term via Gemini]
+        │     ├── Phase 3: Logistics      [📅 Add Election Day to Google Calendar]
+        │     └── Phase 4: Execution      [🗺️ Google Maps Street View Embed]
+        │
+        ├── 🌐 Language Selector (Cloud Translation API → Hindi / Español)
+        ├── 📲 PWA Install Banner (Workbox offline cache)
+        └── 🇮🇳 India Mode Badge + ECI info notice
 ```
-
-### Key Design Decisions
-
-#### 🔁 API Proxy Pattern
-The frontend **never** calls Google APIs directly. All traffic is routed through the Express backend, keeping the API key exclusively server-side and enabling centralized rate limiting and error handling.
-
-#### 🧩 Feature-Sliced Architecture
-Business logic is isolated by domain (`civic/`, `search/`) with cross-cutting utilities in `shared/`. This enforces clear boundaries, prevents coupling, and makes testing trivial.
-
-#### 💾 24-Hour LocalStorage Cache
-```
-cache key:   civic_<sanitized_address>
-cache value: { data: CivicResponse, timestamp: number }
-TTL:         86,400,000 ms (24 hours)
-```
-Repeated queries for the same address return instantly — critical for low-bandwidth environments.
-
-#### ⚡ React Suspense + Lazy Loading
-```tsx
-const ElectionPage = React.lazy(() => import('./pages/ElectionPage'));
-// Wrapped in <Suspense fallback={<Spinner />}>
-```
-Only the `HomePage` ships in the initial bundle, slashing first-paint time.
 
 ---
 
-## 🔐 Security Implementation
+## ✨ Feature Matrix
 
-| Layer | Practice |
-|-------|----------|
-| **API Key Isolation** | Keys stored in `.env` only; never bundled into client code |
-| **XSS Prevention** | `DOMPurify.sanitize()` applied to all user-supplied inputs before rendering |
-| **HTTP Headers** | `helmet()` middleware sets CSP, HSTS, X-Frame-Options, and more |
-| **Input Validation** | Regex + max-length checks in `validate.ts` before forwarding to Google |
-| **CORS Policy** | Restricted to `localhost:5173` in development |
-| **Zero Hardcoded Secrets** | Enforced by `.gitignore` — `.env` is never committed |
+| # | Feature | Google API Used | Route |
+|---|---------|----------------|-------|
+| 1 | **Real-Time US Civic Data** | Civic Information API v2 | `GET /api/civic` |
+| 2 | **India Fallback Engine** | Maps Geocoding + Gemini 1.5 Flash | `GET /api/civic` (auto-detected) |
+| 3 | **Gemini ELI5 Term Explainer** | Gemini 1.5 Flash (`@google/generative-ai`) | `POST /api/explain` |
+| 4 | **Multi-Language Translation** | Cloud Translation API v2 | `POST /api/translate` |
+| 5 | **Street View Reconnaissance** | Maps Embed API (streetview mode) | Frontend embed |
+| 6 | **Google Calendar Sync** | Calendar deep-link template URL | Frontend (no OAuth) |
+| 7 | **PWA Offline Mode** | — (Workbox service worker) | `dist/sw.js` |
+| 8 | **Helmet Security Headers** | — | All routes |
 
 ---
 
-## 🌐 Google Service Integration
+## 🇮🇳 International Fallback Engine (The Odisha Fix)
 
-### 1. Google Civic Information API
-The **core engine** of the platform. On address submission:
-1. The sanitized address is forwarded from the Express backend to the Civic API.
-2. The response is parsed into typed `CivicData` objects.
-3. Results are cached in localStorage under the address key.
-4. The frontend renders `ElectionCard` components for each contest and `RoadmapStepper` for deadlines.
+### The Problem
+The Google Civic Information API covers **US addresses only**. Searching "Odisha" or "Bhubaneswar" returned a `"Civic API key is missing"` / `"Failed to parse address"` error.
 
-**Endpoint used:** `GET https://www.googleapis.com/civicinfo/v2/voterinfo`
+### The Solution
+Every address submitted to `GET /api/civic` is now **geocoded first** using the Google Maps Geocoding API:
 
-### 2. Google Calendar API Integration
-The `useCalendarSync` hook constructs a deep-link event URL — **no OAuth required**:
+```
+User: "Bhubaneswar" or "Odisha"
+    │
+    ▼
+Geocoding API → { country_short_name: "IN" }
+    │
+    ▼  (country = IN detected)
+Gemini 1.5 Flash prompt:
+  "Generate a JSON object for the standard election process,
+   upcoming election type (Lok Sabha or State Assembly),
+   and voter registration steps for [Constituency], [State]
+   based on Election Commission of India (ECI) guidelines."
+    │
+    ▼
+IndiaApiResponse { indiaFallback: true, electionData, coordinates }
+    │
+    ▼
+indiaMapper.ts → CivicVoterInfo (same shape as US data)
+    │
+    ▼
+ElectionPage renders identically — 4-phase roadmap + map embed
+```
+
+### Data generated by Gemini for Indian addresses
+- Constituency name (Lok Sabha / Vidhan Sabha)
+- Expected election year
+- Voter registration steps (ECI guidelines)
+- Phase-specific descriptions (with Hindi transliterations in step titles)
+- Geocoded coordinates for the Google Maps Street View embed
+
+---
+
+## 🤖 Gemini AI Integration
+
+### 1. ECI Election Data Synthesis (`/api/explain`)
+```typescript
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const prompt = `Generate a JSON object for ${location}, India based on ECI guidelines...`;
+const result = await model.generateContent(prompt);
+```
+
+### 2. ELI5 Term Explainer (`POST /api/explain`)
+Every roadmap step has a **🔍 Decrypt Term** button. On click, the step title is sent to Gemini with a structured ELI5 prompt. The response is shown inline without page reload.
+
+```
+"Phase 1: Authorization" → Gemini →
+"It means making sure you are on the list of people allowed to vote,
+ like checking if your name is on the school attendance sheet."
+```
+
+---
+
+## 📲 Progressive Web App (PWA)
+
+Configured via `vite-plugin-pwa` with Workbox:
+
+- **Service Worker**: auto-generated `dist/sw.js` precaches all JS/CSS/HTML (~306 KB)
+- **Web App Manifest**: `dist/manifest.webmanifest` — name, icons, theme colour, `display: standalone`
+- **Install Banner**: Appears in the app header when `beforeinstallprompt` fires
+- **Offline Fallback**: Cached shell renders even without network connectivity
+- **Font Caching**: Google Fonts cached for 1 year via `CacheFirst` strategy
+
+---
+
+## 🌐 Multi-Language Engine
+
+A language selector in the roadmap header calls `POST /api/translate` (Google Cloud Translation API v2).
+Translates all four phase titles and descriptions simultaneously into:
+- **English** (default)
+- **Español** (Spanish)
+- **हिन्दी** (Hindi)
+
+The proxy keeps the Translation API key server-side. On error, the UI gracefully falls back to English.
+
+---
+
+## 📅 Google Calendar Integration
+
+No OAuth required. Uses Google Calendar's template deep-link format:
 
 ```
 https://calendar.google.com/calendar/render?action=TEMPLATE
-  &text=<Election Name>
-  &dates=<YYYYMMDD>/<YYYYMMDD>
-  &details=<Description with polling info>
-  &location=<Polling Place Address>
+  &text=Election+Day+—+Lok+Sabha+2029
+  &dates=20290101/20290102
+  &details=Cast+your+vote...
 ```
 
-Clicking "Add to Calendar" opens Google Calendar in a new tab with the event pre-filled. Users sync their civic deadlines in **one click**.
+Two integration points:
+1. **Phase 3 (Logistics)**: "📅 Add Election Day to Calendar" button (always present when election date is known)
+2. **Step deadlines**: Any step with an explicit `deadline` date shows an "Add Reminder" button
 
-### 3. Google Maps Embed API (Street View Reconnaissance)
-A `<Maps Embed>` iframe renders the user's polling place. Using the **Street View Reconnaissance** feature, the map defaults to an interactive Street View panorama of the exact polling location if coordinates are available, aiding voters in physically identifying their polling location.
+---
 
-### 4. Google Cloud Translation API
-The **Multi-Language Engine** allows users to instantly translate the entire Voter Roadmap (including complex civic terminology) into Hindi and Spanish, improving civic engagement for non-native English speakers.
+## 🗺️ Google Maps Street View
 
-### 5. Google Gemini AI (`gemini-1.5-flash`)
-The **Decrypt Term** feature integrates the `@google/generative-ai` SDK on the backend. A "Decrypt Term" button appears on every roadmap step. When clicked, it sends the civic term to the `/api/explain` endpoint, which queries Gemini with a structured ELI5 prompt and returns a concise plain-English explanation — making civic terminology accessible to every voter.
+Phase 4 (Execution) embeds a Google Maps Street View panorama of the polling location:
+
+```
+https://www.google.com/maps/embed/v1/streetview
+  ?key={VITE_MAPS_EMBED_KEY}
+  &location={lat},{lng}   ← uses geocoded coordinates when available
+```
+
+For Indian addresses, the Geocoding API provides precise lat/lng so the embed shows the actual constituency area.
+
+---
+
+## 🔒 Security
+
+| Layer | Implementation |
+|-------|---------------|
+| HTTP Headers | `helmet()` — CSP, X-Frame-Options, HSTS, nosniff, referrer policy |
+| XSS | `DOMPurify` on all user-rendered content |
+| API Keys | 100% server-side — never exposed to the browser |
+| Input Validation | `validateAddress` middleware — regex + length guards on every request |
+| CORS | Allowlist: localhost dev + `*.run.app` (Cloud Run) via regex |
+| Rate Limiting | Axios 10-second timeout on all external API calls |
 
 ---
 
 ## ♿ Accessibility (WCAG 2.1 AA)
 
-### Multi-Language Engine
-A native language selector allows users to translate the voting roadmap into **Hindi** and **Spanish**, making the democratic process more inclusive and accessible to diverse linguistic communities.
-
-### Contrast Ratios
-
-| Element | Foreground | Background | Ratio |
-|---------|-----------|------------|-------|
-| Body text | `#e2e8f0` | `#0a0e1a` | **12.3:1** ✅ |
-| Accent / links | `#00d4ff` | `#0a0e1a` | **7.8:1** ✅ |
-| Button labels | `#0a0e1a` | `#00d4ff` | **7.8:1** ✅ |
-| Muted labels | `#94a3b8` | `#131929` | **4.6:1** ✅ |
-
-### Keyboard & Screen Reader
-- All interactive elements have **visible focus rings** and logical tab order
-- Spinners use `role="status"` with `aria-label`
-- Error messages use `role="alert"` for immediate announcement
-- Collapsible sections expose `aria-expanded` state
-- Icon-only buttons carry descriptive `aria-label` attributes
-- Dynamic content updates (such as translation state) are broadcast via `aria-live` regions
+- All interactive elements have `aria-label`, `aria-live`, `aria-current`, `aria-expanded`, `aria-busy`
+- Language selector: `<label>` + `aria-label` on `<select>`
+- Gemini result panel: `role="status"` + `aria-live="polite"`
+- Error states: `role="alert"` + `aria-live="assertive"`
+- Full keyboard navigation — no mouse required
+- Skip-to-content link on every page
+- Colour contrast ratios meet AA standards (`#00d4ff` on `#0a0e1a`)
 
 ---
 
 ## 🧪 Testing
 
-```bash
-cd frontend
-
-npm run test           # All unit + component tests (Vitest)
-npm run test:watch     # Watch mode for TDD
-npm run test:coverage  # HTML coverage report → frontend/coverage/
+```
+Test Files  5 passed (5)
+Tests       82 passed (82)
 ```
 
-| Test File | Type | Covers |
-|-----------|------|--------|
-| `dateParser.test.ts` | Unit (Vitest) | Date formatting · invalid inputs · timezone edge cases |
-| `RoadmapStepper.test.tsx` | Component (RTL) | Render from mock state · step count · ARIA roles |
+| Test File | Tests | What it covers |
+|-----------|-------|----------------|
+| `App.test.tsx` | 5 | PWA install banner states, Suspense fallback |
+| `PollingMap.test.tsx` | 14 | Text fallback & iframe branch, ARIA labels, title |
+| `RoadmapStepper.test.tsx` | 25 | Translation, Decrypt Term, Phase 3 calendar, ARIA |
+| `indiaMapper.test.ts` | 19 | All mapper functions, edge cases, null coordinates |
+| `dateParser.test.ts` | 19 | Date parsing, calendar link generation |
 
 ---
 
-## 🚀 Quick Start
-
-### Prerequisites
-- **Node 20+** and **npm 10+**
-- A **Google Civic Information API key** ([get one →](https://console.cloud.google.com/))
-- *(Optional)* A **Google Maps Embed API key** for polling-location maps
-
-### 1 · Clone & Install
+## 🚀 Deployment (Google Cloud Run)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/google-promptwars26-2.git
-cd google-promptwars26-2
+# Authenticate
+gcloud auth login
+gcloud config set project friendly-maker-493516-m9
 
-# Install backend dependencies
-cd backend && npm install
-
-# Install frontend dependencies
-cd ../frontend && npm install
+# Deploy
+gcloud run deploy voter-protocol \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars CIVIC_API_KEY=...,GEMINI_API_KEY=...,TRANSLATION_API_KEY=...,GEOCODING_API_KEY=...,VITE_MAPS_EMBED_KEY=...
 ```
 
-### 2 · Configure Environment
-
-```bash
-# From the project root
-cp .env.example .env
-```
-
-Open `.env` and fill in your keys:
-
-```env
-CIVIC_API_KEY=your_google_civic_api_key
-MAPS_EMBED_KEY=your_maps_embed_api_key      # optional
-PORT=4000
-VITE_API_BASE_URL=http://localhost:4000
-VITE_MAPS_EMBED_KEY=your_maps_embed_api_key # optional
-```
-
-### 3 · Run Development Servers
-
-```bash
-# Terminal 1 — Express backend (port 4000)
-cd backend && npm run dev
-
-# Terminal 2 — Vite frontend (port 5173)
-cd frontend && npm run dev
-```
-
-Open **[http://localhost:5173](http://localhost:5173)** and enter any U.S. address to begin.
-
-### 4 · Run Tests
-
-```bash
-cd frontend && npm run test
-```
-
-### 5 · Production Build
-
-```bash
-cd frontend && npm run build   # → frontend/dist/
-cd backend  && npm run build   # → backend/dist/
-```
+**Live URL**: https://voter-protocol-788976958354.us-central1.run.app
 
 ---
 
-## ⚙️ Environment Variables Reference
+## ⚙️ Environment Variables
 
 | Variable | Required | Description |
 |----------|:--------:|-------------|
 | `CIVIC_API_KEY` | ✅ | Google Civic Information API key (server-side only) |
-| `MAPS_EMBED_KEY` | ☐ | Google Maps Embed API key (server-side) |
-| `TRANSLATION_API_KEY` | ☐ | Google Cloud Translation API key (server-side) |
-| `GEMINI_API_KEY` | ☐ | Google Gemini API key for the Decrypt Term AI feature |
+| `GEOCODING_API_KEY` | ✅ | Google Maps Geocoding API key — for India detection (can reuse Civic key if Maps-enabled) |
+| `GEMINI_API_KEY` | ✅ | Gemini API key — for ECI synthesis and ELI5 Decrypt Term |
+| `MAPS_EMBED_KEY` | ☐ | Google Maps Embed API key (server-side fallback) |
+| `TRANSLATION_API_KEY` | ☐ | Google Cloud Translation API v2 key |
 | `PORT` | ☐ | Backend port (default: `4000`) |
-| `VITE_API_BASE_URL` | ✅ | URL of the Express backend, exposed to Vite |
-| `VITE_MAPS_EMBED_KEY` | ☐ | Maps key exposed to the browser for the embed iframe |
+| `VITE_API_BASE_URL` | ✅ | Backend URL exposed to Vite (e.g. `http://localhost:4000`) |
+| `VITE_MAPS_EMBED_KEY` | ☐ | Maps Embed key for the frontend Street View iframe |
 
-See [`.env.example`](./.env.example) for the complete template.
-
----
-
-## 🔧 Obtaining API Keys
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create or select a project
-3. Navigate to **APIs & Services → Library**
-4. Enable **Civic Information API** (required) and **Maps Embed API** (optional)
-5. Go to **APIs & Services → Credentials → Create Credentials → API Key**
-6. Restrict the key to the specific API(s) for production security
+Copy `.env.example` → `.env` and fill in your keys before running locally.
 
 ---
 
-## 🐛 Common Issues
+## 🏁 Local Setup
 
-| Symptom | Resolution |
-|---------|------------|
-| Civic API returns `403 Forbidden` | Verify `CIVIC_API_KEY` is set in `.env` and the Civic API is enabled in your GCP project |
-| `CORS error` in browser console | Confirm the backend is running on port `4000` and `VITE_API_BASE_URL` is correct |
-| Polling-location map is blank | Add `VITE_MAPS_EMBED_KEY` to `.env` and restart the Vite dev server |
-| Tests fail on CI | Ensure `jsdom` is listed in `vitest.config.ts` as the test environment |
-| Address search returns no results | The Civic API only covers U.S. addresses; try a full street address including state and ZIP |
+```bash
+# Clone
+git clone https://github.com/<your-username>/google-promptwars26-2.git
+cd google-promptwars26-2
+
+# Install all dependencies
+cd frontend && npm install && cd ..
+cd backend && npm install && cd ..
+
+# Configure environment
+cp .env.example .env   # fill in your API keys
+
+# Run in development
+cd backend && npm run dev &    # starts Express on :4000
+cd frontend && npm run dev     # starts Vite on :5173
+
+# Run tests
+cd frontend && npm run test
+
+# Production build
+cd frontend && npm run build   # outputs to frontend/dist/
+```
 
 ---
 
-## 📄 License
+## 📂 Project Structure
 
-Released under the **MIT License**. See [`LICENSE`](./LICENSE) for details.
+```
+google-promptwars26-2/
+├── architecture.png              ← System architecture diagram
+├── Dockerfile                    ← Multi-stage build (Vite + Express)
+├── .env.example                  ← All required env variables documented
+├── frontend/
+│   ├── src/
+│   │   ├── App.tsx               ← PWA install banner + routing
+│   │   ├── features/civic/
+│   │   │   ├── components/
+│   │   │   │   ├── RoadmapStepper.tsx   ← 4-phase roadmap + Decrypt Term + translation
+│   │   │   │   ├── PollingMap.tsx       ← Street View embed
+│   │   │   │   └── ElectionCard.tsx     ← Election summary card
+│   │   │   ├── hooks/
+│   │   │   │   ├── useCivicData.ts      ← India detection + data fetching
+│   │   │   │   └── useCalendarSync.ts   ← Google Calendar deep-link generator
+│   │   │   ├── utils/
+│   │   │   │   └── indiaMapper.ts       ← Maps Gemini → CivicVoterInfo
+│   │   │   └── types.ts                 ← All strict TypeScript interfaces
+│   │   └── shared/
+│   │       ├── hooks/usePWAInstall.ts   ← PWA install prompt hook
+│   │       └── utils/cache.ts           ← 24-hour localStorage caching
+│   └── vite.config.ts            ← Vite + VitePWA configuration
+└── backend/
+    └── src/
+        ├── index.ts              ← Express + Helmet + CORS + all routes
+        └── routes/
+            ├── civic.ts          ← Geocoding + India bypass + US Civic API
+            ├── india.ts          ← Standalone /api/india Gemini route
+            ├── explain.ts        ← Gemini ELI5 term explainer
+            └── translate.ts      ← Cloud Translation API proxy
+```
 
 ---
 
-<p align="center">
-  Built with ❤️ for the <strong>Google Antigravity Challenge</strong> · Powered by the <strong>Google Civic Information API</strong>
-</p>
+## 📜 License
+
+MIT — free to use, fork, and improve.
+
+---
+
+<p align="center">Built with ❤️ for the Google Promptwars Challenge 2026</p>

@@ -175,7 +175,18 @@ export function useCivicData(address: string | null): UseCivicDataResult {
           throw new Error(errorData.error ?? `HTTP ${response.status}`);
         }
 
-        const data = await response.json() as CivicApiResponse;
+        const rawData = await response.json() as CivicApiResponse | IndiaApiResponse;
+
+        // The /api/civic route now geocodes addresses — if it detects India,
+        // it returns an IndiaApiResponse instead of a CivicApiResponse.
+        if (isIndiaFallback(rawData)) {
+          const mapped: CivicVoterInfo = mapIndiaToCivicVoterInfo(rawData);
+          cacheSet(cacheKey, mapped);
+          setState({ data: mapped, loading: false, error: null, fromCache: false, isIndiaMode: true });
+          return;
+        }
+
+        const data = rawData as CivicApiResponse;
         cacheSet(cacheKey, data);
 
         setState({ data, loading: false, error: null, fromCache: false, isIndiaMode: false });
