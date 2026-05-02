@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import civicRouter from './routes/civic';
 
+import translateRouter from './routes/translate';
+
 // Load environment variables from .env file before any other code
 dotenv.config();
 
@@ -37,7 +39,7 @@ app.use(
 app.use(
   cors({
     origin: process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173',
-    methods: ['GET'],
+    methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
   })
 );
@@ -53,8 +55,9 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Mount the Civic API proxy router
+// Mount the API proxy routers
 app.use('/api/civic', civicRouter);
+app.use('/api/translate', translateRouter);
 
 // 404 handler for unmatched routes
 app.use((_req, res) => {

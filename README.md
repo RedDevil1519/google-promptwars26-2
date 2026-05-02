@@ -150,12 +150,18 @@ https://calendar.google.com/calendar/render?action=TEMPLATE
 
 Clicking "Add to Calendar" opens Google Calendar in a new tab with the event pre-filled. Users sync their civic deadlines in **one click**.
 
-### 3. Google Maps Embed API
-A `<Maps Embed>` iframe renders the user's polling place on a map — no JavaScript SDK required, keeping the bundle lean.
+### 3. Google Maps Embed API (Street View Reconnaissance)
+A `<Maps Embed>` iframe renders the user's polling place. Using the **Street View Reconnaissance** feature, the map defaults to an interactive Street View panorama of the exact polling location if coordinates are available, aiding voters in physically identifying their polling location.
+
+### 4. Google Cloud Translation API
+The **Multi-Language Engine** allows users to instantly translate the entire Voter Roadmap (including complex civic terminology) into Hindi and Spanish, improving civic engagement for non-native English speakers.
 
 ---
 
 ## ♿ Accessibility (WCAG 2.1 AA)
+
+### Multi-Language Engine
+A native language selector allows users to translate the voting roadmap into **Hindi** and **Spanish**, making the democratic process more inclusive and accessible to diverse linguistic communities.
 
 ### Contrast Ratios
 
@@ -172,7 +178,7 @@ A `<Maps Embed>` iframe renders the user's polling place on a map — no JavaScr
 - Error messages use `role="alert"` for immediate announcement
 - Collapsible sections expose `aria-expanded` state
 - Icon-only buttons carry descriptive `aria-label` attributes
-- Dynamic content updates are broadcast via `aria-live` regions
+- Dynamic content updates (such as translation state) are broadcast via `aria-live` regions
 
 ---
 

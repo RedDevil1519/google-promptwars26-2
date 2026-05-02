@@ -57,9 +57,15 @@ export const PollingMap: React.FC<PollingMapProps> = ({ location }) => {
     );
   }
 
+  // Use latitude and longitude if available, otherwise fallback to the address string
+  // Google Maps Embed API supports address string for streetview location but lat/lng is more precise.
+  const locationParam = location.latitude && location.longitude 
+    ? `${location.latitude},${location.longitude}` 
+    : encodedAddress;
+
   const embedUrl =
-    `https://www.google.com/maps/embed/v1/place` +
-    `?key=${mapsKey}&q=${encodedAddress}`;
+    `https://www.google.com/maps/embed/v1/streetview` +
+    `?key=${mapsKey}&location=${locationParam}`;
 
   return (
     <div className="polling-map" aria-label={`Map showing polling location at ${addressStr}`}>

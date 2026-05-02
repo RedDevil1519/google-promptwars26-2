@@ -28,6 +28,8 @@ export interface PollingLocation {
   name?: string;
   startDate?: string;
   endDate?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 /** A contest/race on the ballot */

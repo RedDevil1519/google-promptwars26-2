@@ -66,24 +66,93 @@ export const RoadmapStepper: React.FC<RoadmapStepperProps> = ({
   electionName = 'Election',
 }) => {
   const { openCalendarEvent } = useCalendarSync();
+  const [lang, setLang] = React.useState('en');
+  const [translatedSteps, setTranslatedSteps] = React.useState<RoadmapStep[]>(steps);
+  const [isTranslating, setIsTranslating] = React.useState(false);
+
+  React.useEffect(() => {
+    if (lang === 'en') {
+      setTranslatedSteps(steps);
+      return;
+    }
+
+    const translateSteps = async () => {
+      setIsTranslating(true);
+      try {
+        const textsToTranslate = steps.flatMap((s) => [s.title, s.description]);
+        
+        // Use our new backend proxy
+        const res = await fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ q: textsToTranslate, target: lang }),
+        });
+        
+        if (!res.ok) throw new Error('Translation failed');
+        
+        const data = await res.json();
+        // The API returns an array of translations in the data.data.translations array
+        const translations = data.data?.translations?.map((t: any) => t.translatedText);
+        
+        if (translations && translations.length === steps.length * 2) {
+          const newSteps = steps.map((step, i) => ({
+            ...step,
+            title: translations[i * 2],
+            description: translations[i * 2 + 1],
+          }));
+          setTranslatedSteps(newSteps);
+        }
+      } catch (err) {
+        console.error('Translation error:', err);
+        setTranslatedSteps(steps); // Fallback to English on error
+      } finally {
+        setIsTranslating(false);
+      }
+    };
+
+    void translateSteps();
+  }, [lang, steps]);
 
   return (
     <section
       className="roadmap"
       aria-label="Voter roadmap steps"
     >
-      <h2 className="roadmap__heading">
-        <span aria-hidden="true">🗺️</span> Your Voter Roadmap
-      </h2>
-      <p className="roadmap__subtitle">
-        Follow these steps to make your vote count on Election Day.
-      </p>
+      <header className="roadmap__header-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h2 className="roadmap__heading">
+            <span aria-hidden="true">🗺️</span> Your Voter Roadmap
+          </h2>
+          <p className="roadmap__subtitle">
+            Follow these steps to make your vote count on Election Day.
+          </p>
+        </div>
+        
+        <div className="roadmap__language-selector" style={{ marginLeft: '1rem' }}>
+          <label htmlFor="language-select" className="visually-hidden" style={{ display: 'none' }}>Select Language</label>
+          <select 
+            id="language-select"
+            value={lang} 
+            onChange={(e) => setLang(e.target.value)}
+            className="btn btn-outline btn-sm"
+            aria-label="Select language for roadmap"
+            style={{ backgroundColor: '#0a0e1a', color: '#e2e8f0', borderColor: '#00d4ff', padding: '0.5rem', borderRadius: '4px' }}
+          >
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="hi">हिन्दी</option>
+          </select>
+        </div>
+      </header>
+
+      {isTranslating && <p className="roadmap__translating-text" style={{ fontStyle: 'italic', color: '#00d4ff' }}>Translating roadmap...</p>}
 
       <ol
         className="roadmap__list"
         aria-label="Voter registration and voting steps"
+        style={{ opacity: isTranslating ? 0.5 : 1, transition: 'opacity 0.2s ease-in-out' }}
       >
-        {steps.map((step, index) => {
+        {translatedSteps.map((step, index) => {
           const stepState = step.isCompleted
             ? 'completed'
             : step.isCurrent
@@ -117,7 +186,7 @@ export const RoadmapStepper: React.FC<RoadmapStepperProps> = ({
               </div>
 
               {/* Connector line (decorative) */}
-              {index < steps.length - 1 && (
+              {index < translatedSteps.length - 1 && (
                 <div className="roadmap__connector" aria-hidden="true" />
               )}
 
