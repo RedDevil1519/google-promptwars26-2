@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import { validateAddress } from '../middleware/validate';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { stripGeminiJson } from '../utils/stripGeminiJson';
 
 const router = Router();
 
@@ -157,13 +158,11 @@ async function fetchIndiaDataFromGemini(
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   const prompt = buildIndiaPrompt(location, state);
   const result = await model.generateContent(prompt);
-  const rawText = result.response.text().trim();
+  const rawText = result.response.text();
 
-  // Strip accidental markdown code fences
-  const jsonText = rawText
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/```\s*$/i, '')
-    .trim();
+  // Strip any markdown code fences Gemini may add despite being asked not to
+  const jsonText = stripGeminiJson(rawText);
+  console.log(`[Civic Route] Gemini raw (${rawText.length} chars) → stripped (${jsonText.length} chars)`);
 
   return JSON.parse(jsonText) as IndiaElectionData;
 }

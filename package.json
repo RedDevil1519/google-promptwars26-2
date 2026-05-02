@@ -1,0 +1,12 @@
+{
+  "name": "voter-protocol-engine",
+  "version": "1.0.0",
+  "description": "Voter Protocol Engine — full-stack civic AI platform",
+  "scripts": {
+    "gcp-build": "npm install --prefix frontend && npm run build --prefix frontend && npm install --prefix backend && npm run build --prefix backend",
+    "start": "node backend/dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,5 +1,6 @@
 import { Router, type Request, type Response } from 'express';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { stripGeminiJson } from '../utils/stripGeminiJson';
 
 const router = Router();
 
@@ -220,13 +221,11 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
 
     const prompt = buildIndiaPrompt(locationName, stateName);
     const result = await model.generateContent(prompt);
-    const rawText = result.response.text().trim();
+    const rawText = result.response.text();
 
-    // Strip any accidental markdown code fences that the model may add
-    const jsonText = rawText
-      .replace(/^```(?:json)?\s*/i, '')
-      .replace(/```\s*$/i, '')
-      .trim();
+    // Strip any markdown code fences Gemini may add despite being asked not to
+    const jsonText = stripGeminiJson(rawText);
+    console.log(`[India Route] Gemini raw (${rawText.length} chars) → stripped (${jsonText.length} chars)`);
 
     let electionData: IndiaElectionData;
     try {
