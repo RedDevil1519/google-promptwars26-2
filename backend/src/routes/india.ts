@@ -125,35 +125,48 @@ function isInIndia(result: GeocodeResult): boolean {
 /**
  * Builds a structured Gemini prompt for Indian civic election data.
  *
- * @param location - The city or constituency name
+ * Handles any administrative granularity:
+ * - City/town (e.g. "Bhubaneswar")
+ * - District (e.g. "Koraput district, Odisha")
+ * - Taluk/block/tehsil (e.g. "Puri Sadar block")
+ * - Locality/neighbourhood/ward (e.g. "Dharavi, Mumbai")
+ *
+ * @param location - The city, district, block, or locality name
  * @param state - The state name (if available)
  * @returns A detailed prompt string
  */
 function buildIndiaPrompt(location: string, state: string): string {
-  return `You are an expert on the Indian electoral system and the Election Commission of India (ECI).
+  return `You are an expert on the Indian electoral system, the Election Commission of India (ECI), and Indian administrative geography.
 
-A voter is located in ${location}${state ? `, ${state}` : ''}, India.
+A voter is located at: "${location}${state ? `, ${state}` : ''}, India"
+
+This input may be a city, district, taluk, block, tehsil, ward, or neighbourhood. Resolve it to the correct electoral constituencies.
 
 Generate a JSON object with EXACTLY this structure — no extra text, markdown, or code fences:
 {
-  "constituency": "<name of the Lok Sabha or Vidhan Sabha constituency>",
-  "state": "<state name>",
-  "electionType": "<'Lok Sabha' or 'State Assembly (Vidhan Sabha)' — whichever is most imminent>",
+  "resolvedLocation": "<The most specific administrative unit you can identify, e.g. 'Koraput District, Odisha' or 'Dharavi Ward, K-East Zone, Mumbai'>",
+  "district": "<Revenue district name, e.g. 'Koraput' or 'Mumbai City'>",
+  "constituency": "<Vidhan Sabha (State Assembly) constituency name for this location>",
+  "lokSabhaConstituency": "<Lok Sabha (Parliamentary) constituency that covers this location>",
+  "state": "<State/UT name>",
+  "electionType": "<'Lok Sabha' or 'State Assembly (Vidhan Sabha)' — whichever is most imminent as of 2025-2026>",
   "expectedElectionYear": "<year as a string, e.g. '2029'>",
   "voterRegistrationSteps": [
-    "<step 1>",
-    "<step 2>",
-    "<step 3>",
-    "<step 4>"
+    "<Step 1: How to check voter ID eligibility at this location>",
+    "<Step 2: How to register on voters.eci.gov.in or via Form 6>",
+    "<Step 3: How to find the Booth Level Officer (BLO) for this constituency>",
+    "<Step 4: How to download or verify the Voter ID / EPIC card>"
   ],
-  "electionProcessSummary": "<2-3 sentence summary of the Indian election process for this constituency>",
+  "electionProcessSummary": "<2-3 sentence summary of the election process specific to this constituency and district>",
   "phases": {
-    "authorization": "<description of voter ID and registration verification for this location>",
-    "intelligence": "<description of how to research candidates and parties for this constituency>",
-    "logistics": "<description of finding the polling booth, EVM use, and voting timeline>",
-    "execution": "<description of how to cast a vote on election day in India>"
+    "authorization": "<How voter ID (EPIC card / Aadhaar-linked) registration works at this specific district/block level, including any local BLO office details if known>",
+    "intelligence": "<How to research the specific candidates, sitting MLA/MP, and major political parties active in this constituency>",
+    "logistics": "<How to find the exact polling booth for this ward/village, how EVMs + VVPATs work, and what documents to carry on polling day>",
+    "execution": "<Step-by-step process of casting a vote on election day at a polling booth in this constituency>"
   }
 }`;
+}
+
 }
 
 // ── Route ─────────────────────────────────────────────────────────────────────

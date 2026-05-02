@@ -1,0 +1,26 @@
+Country,Region,Election Type,Last Election Date,Next Expected Election,Registered Voters (M),Voter Turnout (%),Election Commission Body,Digital Voting Available,Voter ID Required,Notes
+United States,North America,Presidential / Congressional,2024-11-05,2026-11-03,161.4,65.2,Federal Election Commission (FEC),No,Varies by state,Served via Google Civic Information API
+India,Asia,Lok Sabha (General),2024-04-19,2029-04-01,968.8,67.4,Election Commission of India (ECI),No,Yes (EPIC Card),Served via Gemini AI Fallback Engine
+United Kingdom,Europe,General Election,2024-07-04,2029-07-01,48.8,59.9,Electoral Commission (UK),No,No,First-past-the-post system
+European Union,Europe,European Parliament,2024-06-06,2029-06-01,359.0,51.1,Various National Bodies,Partial,Varies,Multi-nation proportional representation
+Brazil,South America,Presidential / Legislative,2022-10-30,2026-10-04,156.5,79.0,Superior Electoral Court (TSE),Yes (e-voting),Yes (Título Eleitoral),Electronic voting since 1996
+Germany,Europe,Federal Election (Bundestag),2025-02-23,2029-02-01,61.2,77.8,Federal Returning Officer,No,Yes (national ID),Proportional representation with 5% threshold
+France,Europe,Presidential / Legislative,2024-06-30,2027-04-01,49.1,72.0,Constitutional Council,No,Yes,Two-round system
+Japan,Asia,House of Representatives,2024-10-27,2028-10-01,106.0,53.8,Central Election Management Council,No,No,Single non-transferable vote in multi-member districts
+Australia,Oceania,Federal Election,2025-05-03,2028-05-01,17.2,91.0,Australian Electoral Commission (AEC),No,No,Compulsory voting; preferential voting system
+Canada,North America,Federal Election,2025-04-28,2029-04-01,28.3,69.0,Elections Canada,No,Yes (multiple accepted),First-past-the-post; 338 constituencies
+South Africa,Africa,National Assembly,2024-05-29,2029-05-01,27.6,58.6,Electoral Commission of South Africa (IEC),No,Yes (ID book/card),Proportional representation
+Mexico,North America,Presidential / Congressional,2024-06-02,2030-06-01,98.4,61.0,National Electoral Institute (INE),No,Yes (IFE/INE credential),Direct election; no re-election for President
+Indonesia,Asia,Presidential / Legislative,2024-02-14,2029-02-01,204.8,82.0,General Elections Commission (KPU),No,Yes,World's largest single-day election
+Nigeria,Africa,Presidential / National Assembly,2023-02-25,2027-02-01,93.5,29.0,Independent National Electoral Commission (INEC),No,Yes (PVC),Continuous voter registration via INEC portal
+Pakistan,Asia,National Assembly,2024-02-08,2029-02-01,128.0,47.6,Election Commission of Pakistan (ECP),No,Yes (CNIC),Controversial 2024 election; mobile internet restricted on polling day
+Argentina,South America,Presidential / Legislative,2023-10-22,2027-10-01,35.8,77.0,National Electoral Chamber,No,Yes (DNI),Compulsory voting for 18-70 age group
+South Korea,Asia,Presidential,2022-03-09,2027-03-01,44.2,77.1,National Election Commission (NEC),No,Yes,President elected every 5 years; no re-election
+Spain,Europe,General Election,2023-07-23,2027-07-01,37.6,70.4,Central Electoral Commission,No,Yes (DNI),Proportional representation; Congress of Deputies
+Italy,Europe,General Election,2022-09-25,2027-09-01,50.9,64.0,Ministry of the Interior,No,Yes,Rosatellum electoral law
+Turkey,Asia/Europe,Presidential / Grand National Assembly,2023-05-28,2028-06-01,64.1,88.9,Supreme Electoral Council (YSK),No,Yes (T.C. Kimlik),Highest turnout among major democracies
+Sweden,Europe,Riksdag Election,2022-09-11,2026-09-01,7.9,84.2,Election Authority (Valmyndigheten),No,No,Proportional representation; 4% threshold
+New Zealand,Oceania,General Election,2023-10-14,2026-10-01,3.5,78.2,Electoral Commission NZ,No,No,Mixed-member proportional (MMP) system
+Israel,Asia,Knesset Election,2022-11-01,2026-11-01,6.8,71.3,Central Elections Committee,No,Yes,Proportional representation; 3.25% threshold
+Singapore,Asia,General Election,2025-05-03,2030-05-01,2.7,93.9,Elections Department Singapore,No,Yes (NRIC),Compulsory voting; Group Representation Constituencies
+Kenya,Africa,Presidential / National Assembly,2022-08-09,2027-08-01,22.1,64.6,Independent Electoral and Boundaries Commission (IEBC),No,Yes,BVR (Biometric Voter Registration)
