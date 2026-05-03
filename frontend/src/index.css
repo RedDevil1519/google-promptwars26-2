@@ -330,6 +330,23 @@ body {
   display: flex; align-items: center; gap: 0.4rem;
 }
 
+.address-search__helper {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--accent);
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.address-search__helper strong {
+  font-family: var(--font-mono);
+  color: #fff;
+  background: var(--accent-glow);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
 .address-search__submit { align-self: flex-end; width: 100%; justify-content: center; }
 
 /* ── Election Page ─────────────────────────────────────────────── */
