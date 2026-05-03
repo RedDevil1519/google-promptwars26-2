@@ -17,10 +17,13 @@
   },
   "dependencies": {
     "@types/dompurify": "^3.0.5",
+    "@vitejs/plugin-react": "^6.0.1",
     "dompurify": "^3.4.2",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-router-dom": "^7.14.2"
+    "react-router-dom": "^7.14.2",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.10"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -33,7 +36,6 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
-    "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.1.5",
     "eslint": "^10.3.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -43,9 +45,7 @@
     "globals": "^17.5.0",
     "jsdom": "^29.1.1",
     "prettier": "^3.8.3",
-    "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
-    "vite": "^8.0.10",
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.1.5"
   }
