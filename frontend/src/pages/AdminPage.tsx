@@ -89,6 +89,14 @@ const AdminPage: React.FC = () => {
             <h1 className="admin-login__title">Secure Admin Access</h1>
             <p className="admin-login__subtitle">Voter Protocol Engine — Obsidian Gateway</p>
 
+            <div className="admin-login__credential-box" role="note" aria-label="Evaluation Credentials">
+              <span className="admin-login__credential-icon" aria-hidden="true">💡</span>
+              <div className="admin-login__credential-text">
+                <strong>Evaluation Access:</strong><br />
+                <span className="admin-login__credential-value">Username: <code>admin</code> | Password: <code>admin123</code></span>
+              </div>
+            </div>
+
             <form
               onSubmit={(e) => void handleLogin(e)}
               className="admin-login__form"
@@ -162,11 +170,6 @@ const AdminPage: React.FC = () => {
             <Link to="/" className="admin-login__back" aria-label="Return to main site">
               ← Back to Voter Protocol Engine
             </Link>
-
-            <div className="admin-login__eval-note" role="note">
-              <span aria-hidden="true">💡</span>
-              <strong>Evaluation Access:</strong> admin / admin123
-            </div>
           </div>
         </div>
       </main>

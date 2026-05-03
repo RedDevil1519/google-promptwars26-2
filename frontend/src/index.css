@@ -201,6 +201,12 @@ body {
   border-radius: var(--radius-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  animation: neon-pulse 3s infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { box-shadow: 0 0 8px var(--accent-glow); border-color: var(--accent-dim); }
+  50% { box-shadow: 0 0 16px var(--accent), inset 0 0 8px var(--accent-glow); border-color: var(--accent); }
 }
 .home-page__admin-btn:hover {
   background: var(--accent-glow);
@@ -753,12 +759,40 @@ body {
 .admin-table__row:last-child .admin-table__cell { border-bottom: none; }
 /* ── Final Submission Polish ───────────────────────────────────── */
 
-.admin-login__eval-note {
-  margin-top: 1.5rem; padding: 1rem;
-  background: var(--accent-glow); border: 1px solid var(--border-accent);
-  border-radius: var(--radius-md); font-size: 0.82rem;
-  color: var(--text-primary); text-align: center;
-  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+.admin-login__credential-box {
+  margin: 1.5rem 0; padding: 1.25rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  display: flex; align-items: flex-start; gap: 0.85rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+.admin-login__credential-icon {
+  font-size: 1.5rem;
+  margin-top: -0.1rem;
+}
+.admin-login__credential-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.admin-login__credential-text strong {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+.admin-login__credential-value {
+  color: var(--text-secondary);
+}
+.admin-login__credential-value code {
+  font-family: var(--font-mono);
+  color: #fff;
+  background: rgba(0, 242, 255, 0.15);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
 }
 
 .civic-ticker {
