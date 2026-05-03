@@ -5,14 +5,11 @@
  * Provides a mock admin login (admin / admin123) that shows a
  * "Civic Data Management" dashboard on success.
  *
- * Uses only sessionStorage — no backend calls, no JWT library.
- * Isolated: if auth fails or session expires, the main app is unaffected.
+ * Uses backend JWT mock logic via /api/admin/login.
  */
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'admin123';
 const SESSION_KEY = 'vpe_admin_authed';
 
 /**
@@ -30,13 +27,10 @@ const MOCK_STATS = [
 
 /**
  * AdminPage — fully isolated admin dashboard.
- *
- * The login state is stored in sessionStorage and cleared on tab close.
- * No network requests are made; the main civic app is not affected.
  */
 const AdminPage: React.FC = () => {
   const [isAuthed, setIsAuthed] = React.useState<boolean>(
-    () => sessionStorage.getItem(SESSION_KEY) === '1'
+    () => !!sessionStorage.getItem(SESSION_KEY)
   );
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');

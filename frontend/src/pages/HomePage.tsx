@@ -6,7 +6,7 @@
  * When an address is submitted, navigates to the ElectionPage.
  */
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AddressSearch } from '@features/search/components/AddressSearch';
 
 /**
@@ -40,7 +40,12 @@ const HomePage: React.FC = () => {
         <div className="home-page__hero-glow" aria-hidden="true" />
 
         <header className="home-page__header">
-          <div className="home-page__logo" aria-hidden="true">⚡</div>
+          <div className="home-page__header-top">
+            <div className="home-page__logo" aria-hidden="true">⚡</div>
+            <Link to="/admin" className="btn btn-secondary btn-sm home-page__admin-btn" aria-label="Admin login">
+              Admin Login
+            </Link>
+          </div>
           <h1 className="home-page__title">
             Voter Protocol{' '}
             <span className="home-page__title-accent">Engine</span>
