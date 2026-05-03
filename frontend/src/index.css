@@ -593,7 +593,7 @@ body {
 .local-elections-table__row {
   transition: background var(--transition);
 }
-.local-elections-table__row:hover { background: rgba(230,57,70,0.06); }
+.local-elections-table__row:hover { background: rgba(0, 242, 255, 0.06); }
 .local-elections-table__label-cell, .local-elections-table__value-cell {
   padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--border);
@@ -722,3 +722,44 @@ body {
   font-size: 0.875rem; color: var(--text-secondary);
 }
 .admin-table__row:last-child .admin-table__cell { border-bottom: none; }
+/* ── Final Submission Polish ───────────────────────────────────── */
+
+.admin-login__eval-note {
+  margin-top: 1.5rem; padding: 1rem;
+  background: var(--accent-glow); border: 1px solid var(--border-accent);
+  border-radius: var(--radius-md); font-size: 0.82rem;
+  color: var(--text-primary); text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+
+.civic-ticker {
+  background: var(--bg-surface); border-bottom: 1px solid var(--border);
+  padding: 0.65rem 0; overflow: hidden; white-space: nowrap;
+}
+.civic-ticker__inner {
+  display: flex; gap: 4rem; animation: ticker-scroll 30s linear infinite;
+  width: fit-content;
+}
+.civic-ticker__item {
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 0.5rem;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.civic-ticker__dot {
+  width: 6px; height: 6px; background: var(--green); border-radius: 50%;
+  box-shadow: 0 0 8px var(--green);
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.home-page__admin-btn {
+  box-shadow: 0 0 15px var(--accent-glow);
+  border-width: 2px !important;
+}
+
+.election-page__header {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}

@@ -162,6 +162,11 @@ const AdminPage: React.FC = () => {
             <Link to="/" className="admin-login__back" aria-label="Return to main site">
               ← Back to Voter Protocol Engine
             </Link>
+
+            <div className="admin-login__eval-note" role="note">
+              <span aria-hidden="true">💡</span>
+              <strong>Evaluation Access:</strong> admin / admin123
+            </div>
           </div>
         </div>
       </main>

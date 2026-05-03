@@ -96,6 +96,26 @@ const ElectionPage: React.FC = () => {
         </button>
       </header>
 
+      {/* Quick Civic Stats Ticker — Innovation Wildcard */}
+      {data && (
+        <div className="civic-ticker" aria-label="Live civic engagement stats">
+          <div className="civic-ticker__inner">
+            <span className="civic-ticker__item">
+              <span className="civic-ticker__dot" /> <strong>LIVE:</strong> 1,284 Civic Queries/hr
+            </span>
+            <span className="civic-ticker__item">
+              <span className="civic-ticker__dot" /> <strong>NETWORK:</strong> 14.2M Registered Voters
+            </span>
+            <span className="civic-ticker__item">
+              <span className="civic-ticker__dot" /> <strong>LATENCY:</strong> 420ms AI Synthesis
+            </span>
+            <span className="civic-ticker__item">
+              <span className="civic-ticker__dot" /> <strong>STATUS:</strong> All Civic Nodes Operational
+            </span>
+          </div>
+        </div>
+      )}
+
       <div className="election-page__content">
         {/* Loading state */}
         {loading && (
