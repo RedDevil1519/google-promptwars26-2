@@ -56,22 +56,27 @@ const HomePage: React.FC = () => {
           <AddressSearch onSearch={handleSearch} />
         </div>
 
-        <div className="home-page__features" aria-label="Key features">
+        <nav className="home-page__features" aria-label="Key features">
           {[
-            { icon: '🗳️', label: 'Local Elections', desc: 'Real-time civic data' },
-            { icon: '🗺️', label: 'Voter Roadmap', desc: 'Step-by-step guide' },
-            { icon: '📅', label: 'Calendar Sync', desc: 'One-click deadlines' },
-            { icon: '📍', label: 'Polling Map', desc: 'Find your location' },
+            { icon: '🗳️', label: 'Local Elections', desc: 'Real-time civic data', href: '/election?address=Washington+DC' },
+            { icon: '🗺️', label: 'Voter Roadmap', desc: 'Step-by-step guide', href: '/election?address=Austin+TX' },
+            { icon: '📅', label: 'Calendar Sync', desc: '.ics + Google Calendar', href: '/election?address=New+York+NY' },
+            { icon: '📍', label: 'Polling Map', desc: 'Find your location', href: '/election?address=Chicago+IL' },
           ].map((feature) => (
-            <div key={feature.label} className="home-page__feature-card">
+            <a
+              key={feature.label}
+              href={feature.href}
+              className="home-page__feature-card"
+              aria-label={`${feature.label}: ${feature.desc}`}
+            >
               <span className="home-page__feature-icon" aria-hidden="true">
                 {feature.icon}
               </span>
               <strong className="home-page__feature-label">{feature.label}</strong>
               <span className="home-page__feature-desc">{feature.desc}</span>
-            </div>
+            </a>
           ))}
-        </div>
+        </nav>
       </div>
 
       {/* Animated background particles — decorative */}

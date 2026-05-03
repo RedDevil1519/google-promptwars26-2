@@ -20,6 +20,7 @@ import { usePWAInstall } from '@shared/hooks/usePWAInstall';
  */
 const HomePage = lazy(() => import('@pages/HomePage'));
 const ElectionPage = lazy(() => import('@pages/ElectionPage'));
+const AdminPage = lazy(() => import('@pages/AdminPage'));
 
 /**
  * Full-screen loading fallback shown while a lazy route chunk is downloading.
@@ -86,6 +87,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/election" element={<ElectionPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             {/* 404 fallback */}
             <Route
               path="*"

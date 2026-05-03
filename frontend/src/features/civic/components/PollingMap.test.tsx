@@ -2,8 +2,8 @@
  * PollingMap.test.tsx
  *
  * Component tests for the PollingMap component using React Testing Library.
- * Covers both the text-fallback branch (no API key) and the iframe/Street View
- * branch (API key present).
+ * Updated for the new free-embed PollingMap (no API key required).
+ * The component now always renders the Google Maps iframe.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
@@ -36,7 +36,6 @@ const minimalLocation: PollingLocation = {
 describe('PollingMap', () => {
 
   beforeEach(() => {
-    // Reset env before each test
     vi.stubEnv('VITE_MAPS_EMBED_KEY', '');
   });
 
@@ -44,13 +43,12 @@ describe('PollingMap', () => {
     vi.unstubAllEnvs();
   });
 
-  // ── Text fallback branch (no API key) ───────────────────────────────────
+  // ── Free embed branch (always renders iframe) ────────────────────────────
 
-  describe('without API key (text fallback)', () => {
+  describe('always shows map (free embed)', () => {
     it('renders polling location address text', () => {
       render(<PollingMap location={fullLocation} />);
       expect(screen.getByText(/City Hall/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Polling location address/i)).toBeInTheDocument();
     });
 
     it('renders the "Polling Location" label', () => {
@@ -68,9 +66,9 @@ describe('PollingMap', () => {
       expect(screen.queryByText(/hours/i)).not.toBeInTheDocument();
     });
 
-    it('has an accessible aria-label on the container', () => {
+    it('has an accessible aria-label on the map container', () => {
       render(<PollingMap location={fullLocation} />);
-      const container = screen.getByLabelText(/Polling location address/i);
+      const container = screen.getByLabelText(/Map showing polling location at City Hall/i);
       expect(container).toBeInTheDocument();
     });
 
@@ -80,25 +78,20 @@ describe('PollingMap', () => {
     });
   });
 
-  // ── Map/Street View branch (API key present) ────────────────────────────
+  // ── Iframe tests ────────────────────────────────────────────────────────
 
-  describe('with API key (iframe branch)', () => {
-    beforeEach(() => {
-      vi.stubEnv('VITE_MAPS_EMBED_KEY', 'test-maps-api-key');
-    });
-
-    it('renders an iframe when the API key is set', () => {
+  describe('iframe embed', () => {
+    it('renders an iframe', () => {
       render(<PollingMap location={fullLocation} />);
       const iframe = screen.getByTitle(/Map of polling location/i);
       expect(iframe).toBeInTheDocument();
       expect(iframe.tagName).toBe('IFRAME');
     });
 
-    it('iframe uses lat/lng in src when coordinates are available', () => {
+    it('iframe uses address string in src (free embed uses q= param)', () => {
       render(<PollingMap location={fullLocation} />);
       const iframe = screen.getByTitle(/Map of polling location/i) as HTMLIFrameElement;
-      expect(iframe.src).toContain('39.7817');
-      expect(iframe.src).toContain('-89.6501');
+      expect(iframe.src).toContain('City%20Hall');
     });
 
     it('iframe falls back to address string when no coordinates', () => {
@@ -113,17 +106,17 @@ describe('PollingMap', () => {
       expect(iframe).toBeInTheDocument();
     });
 
-    it('renders "Your Polling Location" label in map mode', () => {
+    it('renders "Your Polling Location" label', () => {
       render(<PollingMap location={fullLocation} />);
       expect(screen.getByText(/Your Polling Location/i)).toBeInTheDocument();
     });
 
-    it('renders pollingHours in map mode when provided', () => {
+    it('renders pollingHours when provided', () => {
       render(<PollingMap location={fullLocation} />);
       expect(screen.getByText(/7am - 8pm/i)).toBeInTheDocument();
     });
 
-    it('does not render polling hours in map mode when omitted', () => {
+    it('does not render polling hours when omitted', () => {
       render(<PollingMap location={minimalLocation} />);
       expect(screen.queryByText(/7am - 8pm/i)).not.toBeInTheDocument();
     });
@@ -133,6 +126,12 @@ describe('PollingMap', () => {
       expect(
         screen.getByLabelText(/Map showing polling location at City Hall/i)
       ).toBeInTheDocument();
+    });
+
+    it('renders a Google Maps link for the address', () => {
+      render(<PollingMap location={fullLocation} />);
+      const link = screen.getByRole('link', { name: /Open.*in Google Maps/i });
+      expect(link).toHaveAttribute('href', expect.stringContaining('maps.google.com'));
     });
   });
 });

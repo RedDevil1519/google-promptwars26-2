@@ -15,7 +15,9 @@ import { useCivicData } from '@features/civic/hooks/useCivicData';
 import { ElectionCard } from '@features/civic/components/ElectionCard';
 import { RoadmapStepper, DEFAULT_ROADMAP_STEPS } from '@features/civic/components/RoadmapStepper';
 import { PollingMap } from '@features/civic/components/PollingMap';
+import { LocalElectionsTable } from '@features/civic/components/LocalElectionsTable';
 import { Spinner } from '@shared/components/Spinner';
+import { downloadICS } from '@shared/utils/calendarExport';
 import { isFallbackResponse } from '@features/civic/types';
 import type { CivicVoterInfo } from '@features/civic/types';
 
@@ -32,6 +34,11 @@ const ElectionPage: React.FC = () => {
 
   const voterInfo = data && !isFallbackResponse(data) ? (data as CivicVoterInfo) : null;
   const fallbackElections = data && isFallbackResponse(data) ? data.elections : null;
+
+  // Detect Gemini US fallback (gemininFallback flag from civic route)
+  const geminiUSData = (data as Record<string, unknown> | null)?.gemininFallback
+    ? (data as Record<string, unknown>)
+    : null;
 
   /**
    * The election date extracted from civic data (ISO 8601 YYYY-MM-DD).
@@ -163,6 +170,23 @@ const ElectionPage: React.FC = () => {
                 electionName={voterInfo.election.name}
                 electionDate={electionDate}
               />
+              {electionDate && (
+                <div style={{ marginTop: '0.75rem' }}>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() =>
+                      downloadICS({
+                        title: `Election Day — ${voterInfo.election.name}`,
+                        date: electionDate,
+                        description: `Cast your vote for ${voterInfo.election.name}. Remember to check your polling location.`,
+                      })
+                    }
+                    aria-label={`Download ${voterInfo.election.name} as an .ics calendar file`}
+                  >
+                    <span aria-hidden="true">📥</span> Download .ics Reminder
+                  </button>
+                </div>
+              )}
             </section>
 
             {/* Polling locations */}
@@ -226,7 +250,34 @@ const ElectionPage: React.FC = () => {
 
             <section className="election-page__section" aria-label="Voter roadmap">
               <RoadmapStepper steps={DEFAULT_ROADMAP_STEPS} />
+              {electionDate && (
+                <div style={{ marginTop: '0.75rem' }}>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() =>
+                      downloadICS({
+                        title: `Election Day`,
+                        date: electionDate,
+                        description: `Cast your vote. Remember to check your polling location.`,
+                      })
+                    }
+                    aria-label="Download election as an .ics calendar file"
+                  >
+                    <span aria-hidden="true">📥</span> Download .ics Reminder
+                  </button>
+                </div>
+              )}
             </section>
+
+            {/* Gemini US structured data table */}
+            {geminiUSData && (
+              <section className="election-page__section" aria-label="Local election requirements">
+                <LocalElectionsTable
+                  location={address}
+                  civicData={geminiUSData.civicData as Record<string, string>}
+                />
+              </section>
+            )}
           </div>
         )}
       </div>
