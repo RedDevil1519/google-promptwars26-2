@@ -3,7 +3,7 @@
  *
  * Secure /admin route — standalone from the main civic app.
  * Provides a mock admin login (admin / admin123) that shows a
- * "Civic Data Management" dashboard on success.
+ * "Secure Management Dashboard" on success.
  *
  * Uses backend JWT mock logic via /api/admin/login.
  */
@@ -86,8 +86,8 @@ const AdminPage: React.FC = () => {
         <div className="admin-login">
           <div className="admin-login__card">
             <div className="admin-login__logo" aria-hidden="true">🛡️</div>
-            <h1 className="admin-login__title">Civic Data Admin</h1>
-            <p className="admin-login__subtitle">Voter Protocol Engine — Secure Access</p>
+            <h1 className="admin-login__title">Secure Admin Access</h1>
+            <p className="admin-login__subtitle">Voter Protocol Engine — Obsidian Gateway</p>
 
             <form
               onSubmit={(e) => void handleLogin(e)}
@@ -176,7 +176,7 @@ const AdminPage: React.FC = () => {
       <header className="admin-dashboard__header">
         <div className="admin-dashboard__title-group">
           <span aria-hidden="true">🛡️</span>
-          <h1 className="admin-dashboard__title">Civic Data Management</h1>
+          <h1 className="admin-dashboard__title">Secure Management Dashboard</h1>
         </div>
         <div className="admin-dashboard__actions">
           <Link to="/" className="btn btn-ghost btn-sm" aria-label="Return to main site">

@@ -1,6 +1,6 @@
 /* ================================================================
-   Voter Protocol Engine — Cyber-Civic Cyan Theme
-   Deep Navy · Cyan Blue · Slate Grey · Glassmorphism
+   Voter Protocol Engine — Obsidian & Neon Cyan Overhaul
+   Futuristic Civic Utility · Obsidian Background · Glassmorphism
    WCAG 2.1 AA compliant contrast ratios throughout
    ================================================================ */
 
@@ -8,44 +8,44 @@
 
 /* ── Design Tokens ─────────────────────────────────────────────── */
 :root {
-  --bg-base:        #0a0e1a;
-  --bg-surface:     #131929;
-  --bg-elevated:    #1b2340;
-  --bg-card:        #1a2035;
+  --bg-base:        #02040a;   /* Obsidian deep black */
+  --bg-surface:     #0a0e1a;
+  --bg-elevated:    #101626;
+  --bg-card:        #0d1321;
 
-  /* Cyan Blue aesthetic — original design */
-  --accent:         #00d4ff;
-  --accent-dim:     #0099bb;
-  --accent-glow:    rgba(0, 212, 255, 0.18);
+  /* Neon Cyan aesthetic — Futuristic */
+  --accent:         #00f2ff;
+  --accent-dim:     #00c2cc;
+  --accent-glow:    rgba(0, 242, 255, 0.22);
 
-  --green:          #00e676;
-  --green-dim:      rgba(0, 230, 118, 0.15);
-  --amber:          #ffb300;
-  --amber-dim:      rgba(255, 179, 0, 0.15);
-  --red:            #ff4d6a;
-  --red-dim:        rgba(255, 77, 106, 0.15);
+  --green:          #00ffa3;
+  --green-dim:      rgba(0, 255, 163, 0.15);
+  --amber:          #ffd600;
+  --amber-dim:      rgba(255, 214, 0, 0.15);
+  --red:            #ff2e5b;
+  --red-dim:        rgba(255, 46, 91, 0.15);
 
-  --text-primary:   #e2e8f0;   /* 12.3:1 on bg-base ✅ */
-  --text-secondary: #94a3b8;   /* 4.6:1  on bg-surface ✅ */
-  --text-muted:     #64748b;
+  --text-primary:   #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted:     #475569;
 
-  --border:         rgba(255,255,255,0.08);
-  --border-accent:  rgba(0, 212, 255, 0.35);
+  --border:         rgba(255,255,255,0.06);
+  --border-accent:  rgba(0, 242, 255, 0.40);
 
-  /* Glassmorphism tokens */
-  --glass-bg:       rgba(19, 25, 41, 0.55);
-  --glass-border:   rgba(255,255,255,0.10);
-  --glass-blur:     12px;
+  /* Glassmorphism tokens — enhanced blur */
+  --glass-bg:       rgba(10, 14, 26, 0.65);
+  --glass-border:   rgba(255,255,255,0.08);
+  --glass-blur:     16px;
 
-  --radius-sm:  6px;
-  --radius-md:  12px;
-  --radius-lg:  20px;
-  --radius-xl:  32px;
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  22px;
+  --radius-xl:  36px;
 
-  --shadow-card: 0 4px 32px rgba(0,0,0,0.45);
-  --shadow-glow: 0 0 40px rgba(0, 212, 255, 0.15);
+  --shadow-card: 0 10px 40px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 50px rgba(0, 242, 255, 0.18);
 
-  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
   --font-sans:  'Inter', system-ui, sans-serif;
   --font-mono:  'JetBrains Mono', monospace;
 }
@@ -108,9 +108,9 @@ body {
   box-shadow: 0 0 20px var(--accent-glow);
 }
 .btn-primary:hover:not(:disabled) {
-  background: #1ae8ff;
-  box-shadow: 0 0 32px rgba(0, 212, 255, 0.4);
-  transform: translateY(-2px);
+  background: #00ffff;
+  box-shadow: 0 0 35px rgba(0, 242, 255, 0.6);
+  transform: translateY(-3px) scale(1.02);
 }
 
 .btn-secondary {
@@ -248,10 +248,10 @@ body {
   text-decoration: none; color: inherit;
 }
 .home-page__feature-card:hover, .home-page__feature-card:focus-visible {
-  border-color: var(--border-accent);
-  background: rgba(0, 212, 255, 0.10);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(0, 212, 255, 0.2);
+  border-color: var(--accent);
+  background: rgba(0, 242, 255, 0.12);
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0, 242, 255, 0.25);
 }
 
 .home-page__feature-icon { font-size: 1.8rem; }
