@@ -44,22 +44,36 @@ const AdminPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   /**
-   * Handles login form submission.
-   * Simulates a 600ms network delay, then validates credentials.
+   * Handles login form submission via backend API.
+   * Uses JWT mock logic to gate the dashboard.
    */
   const handleLogin = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-    // Simulate network latency
-    await new Promise<void>((r) => setTimeout(r, 600));
-    if (username === ADMIN_USER && password === ADMIN_PASS) {
-      sessionStorage.setItem(SESSION_KEY, '1');
-      setIsAuthed(true);
-    } else {
-      setError('Invalid credentials. Hint: admin / admin123');
+
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Store the mock JWT token
+        sessionStorage.setItem(SESSION_KEY, data.token);
+        setIsAuthed(true);
+      } else {
+        setError(data.error || 'Authentication failed. Check credentials.');
+      }
+    } catch (err) {
+      console.error('[Admin Login Error]', err);
+      setError('Connection failed. Is the backend running?');
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   const handleLogout = (): void => {

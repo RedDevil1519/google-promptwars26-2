@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://voter-protocol-788976958354.us-central1.run.app/sitemap.xml

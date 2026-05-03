@@ -7,6 +7,7 @@ import civicRouter from './routes/civic';
 import translateRouter from './routes/translate';
 import explainRouter from './routes/explain';
 import indiaRouter from './routes/india';
+import adminRouter from './routes/admin';
 
 // Load environment variables from .env file before any other code
 dotenv.config();
@@ -66,6 +67,7 @@ app.use('/api/civic', civicRouter);
 app.use('/api/translate', translateRouter);
 app.use('/api/explain', explainRouter);
 app.use('/api/india', indiaRouter);
+app.use('/api/admin', adminRouter);
 
 // Serve frontend static files in production
 const frontendPath = path.join(__dirname, '../../frontend/dist');
