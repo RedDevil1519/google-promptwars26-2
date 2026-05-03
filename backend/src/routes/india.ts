@@ -167,7 +167,6 @@ Generate a JSON object with EXACTLY this structure — no extra text, markdown, 
 }`;
 }
 
-}
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 

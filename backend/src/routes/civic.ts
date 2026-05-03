@@ -154,7 +154,6 @@ Generate a JSON object with EXACTLY this structure — no extra text, markdown, 
 }`;
 }
 
-}
 
 /**
  * Calls the Gemini API to generate structured election data for an Indian location.
