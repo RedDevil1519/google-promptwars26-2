@@ -65,9 +65,13 @@ Keep your answer under 60 words.
 Term: "${term.trim()}"`;
 
     const result = await model.generateContent(prompt);
-    const explanation = result.response.text().trim();
+    const response = await result.response;
+    const rawText = response.text().trim();
 
-    res.status(200).json({ term: term.trim(), explanation } satisfies ExplainResponse);
+    // Remove any ```json or ``` markdown blocks the AI might include
+    const cleanedText = rawText.replace(/```(json)?|```/g, '').trim();
+
+    res.status(200).json({ term: term.trim(), explanation: cleanedText } satisfies ExplainResponse);
   } catch (error) {
     console.error('[Explain Route] Gemini API error:', error);
     res.status(500).json({ error: 'Failed to generate explanation. Please try again.' } satisfies ExplainErrorResponse);

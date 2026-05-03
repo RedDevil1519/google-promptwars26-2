@@ -469,8 +469,8 @@ body {
 }
 
 @keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 12px rgba(230,57,70,0.3); }
-  50%       { box-shadow: 0 0 28px rgba(230,57,70,0.55); }
+  0%, 100% { box-shadow: 0 0 12px rgba(0, 242, 255, 0.3); }
+  50%       { box-shadow: 0 0 28px rgba(0, 242, 255, 0.55); }
 }
 
 .roadmap__connector {
@@ -715,7 +715,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .admin-table__row { transition: background var(--transition); }
-.admin-table__row:hover { background: rgba(230,57,70,0.06); }
+.admin-table__row:hover { background: rgba(0, 242, 255, 0.06); }
 .admin-table__cell {
   padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--border);
@@ -762,4 +762,48 @@ body {
 
 .election-page__header {
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+/* ── Decrypt Term ──────────────────────────────────────────────── */
+.decrypt-term {
+  margin-top: 1rem;
+}
+.decrypt-term__btn {
+  font-size: 0.72rem;
+  border-color: var(--accent-dim);
+  color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+.decrypt-term__btn:hover {
+  background: var(--accent-glow);
+  box-shadow: 0 0 20px var(--accent-glow);
+  transform: scale(1.05);
+}
+.decrypt-term__result {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  animation: slide-down 0.3s ease-out;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.decrypt-term__result strong {
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.decrypt-term__error {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--amber);
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
