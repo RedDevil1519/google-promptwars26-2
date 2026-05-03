@@ -38,7 +38,7 @@ router.post('/login', (req, res) => {
 router.get('/stats', (_req, res) => {
   res.status(200).json({
     stats: [
-      { label: 'Total Queries Today', value: '1,284', icon: '📊', color: '#e63946' },
+      { label: 'Total Queries Today', value: '1,284', icon: '📊', color: '#00f2ff' },
       { label: 'US Mode Hits', value: '891', icon: '🇺🇸', color: '#4ade80' },
       { label: 'India Mode Hits', value: '312', icon: '🇮🇳', color: '#fb923c' },
       { label: 'Cache Hit Rate', value: '78%', icon: '⚡', color: '#a78bfa' },
