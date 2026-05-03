@@ -193,7 +193,19 @@ body {
   max-width: 800px; margin: 0 auto 1.5rem;
 }
 .home-page__admin-btn {
-  font-size: 0.75rem; font-weight: 700; padding: 0.5rem 1rem;
+  font-size: 0.75rem; font-weight: 700; padding: 0.5rem 1.25rem;
+  border: 1.5px solid var(--accent) !important;
+  color: var(--accent);
+  background: transparent;
+  box-shadow: 0 0 12px var(--accent-glow);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.home-page__admin-btn:hover {
+  background: var(--accent-glow);
+  box-shadow: 0 0 20px var(--accent);
+  transform: translateY(-2px);
 }
 
 .home-page__logo {
@@ -769,14 +781,18 @@ body {
 }
 .decrypt-term__btn {
   font-size: 0.72rem;
-  border-color: var(--accent-dim);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--accent-dim) !important;
   color: var(--accent);
-  box-shadow: 0 0 10px var(--accent-glow);
+  box-shadow: 0 0 8px var(--accent-glow);
+  border-radius: var(--radius-sm);
 }
 .decrypt-term__btn:hover {
   background: var(--accent-glow);
-  box-shadow: 0 0 20px var(--accent-glow);
-  transform: scale(1.05);
+  box-shadow: 0 0 16px var(--accent);
+  transform: translateY(-1px);
 }
 .decrypt-term__result {
   margin-top: 0.75rem;

@@ -58,7 +58,7 @@ const ElectionPage: React.FC = () => {
         <Link to="/" className="election-page__back" aria-label="Back to home">
           <span aria-hidden="true">←</span> Home
         </Link>
-        <Link to="/admin" className="btn btn-secondary btn-sm" aria-label="Admin login">
+        <Link to="/admin" className="btn btn-secondary btn-sm home-page__admin-btn" aria-label="Admin login">
           Admin Login
         </Link>
         <div className="election-page__address-pill" aria-label={`Showing results for: ${address}`}>
