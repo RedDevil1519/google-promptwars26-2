@@ -36,8 +36,8 @@ const ElectionPage: React.FC = () => {
   const fallbackElections = data && isFallbackResponse(data) ? data.elections : null;
 
   // Detect Gemini US fallback (gemininFallback flag from civic route)
-  const geminiUSData = (data as Record<string, unknown> | null)?.gemininFallback
-    ? (data as Record<string, unknown>)
+  const geminiUSData = (data as unknown as Record<string, unknown> | null)?.gemininFallback
+    ? (data as unknown as Record<string, unknown>)
     : null;
 
   /**
