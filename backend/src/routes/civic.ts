@@ -154,6 +154,57 @@ Generate a JSON object with EXACTLY this structure — no extra text, markdown, 
 }`;
 }
 
+/**
+ * Builds a structured Gemini prompt for U.S. civic election data.
+ *
+ * Returns detailed, JSON-formatted voter information for a given
+ * U.S. state or region, covering registration, ID requirements,
+ * early voting, absentee rules, and polling hours.
+ *
+ * @param location - U.S. state, city, or region name
+ * @returns A detailed prompt string
+ */
+function buildUSPrompt(location: string): string {
+  return `Act as an official U.S. Civic Assistant. Provide detailed, JSON-formatted election data for the state/region of: ${location}.
+Include:
+1. "registration_deadline": Specific date for 2024.
+2. "voter_id_requirements": Exact IDs needed (e.g., Driver's License, SSN).
+3. "early_voting_dates": Start and end dates.
+4. "absentee_ballot_rules": Brief summary of eligibility.
+5. "polling_hours": Typical opening and closing times.
+
+Return ONLY raw JSON without markdown code blocks.`;
+}
+
+/**
+ * Calls Gemini to generate structured U.S. civic data when the
+ * Google Civic Information API has no election data for an address.
+ *
+ * @param location - U.S. state, city, or region
+ * @param geminiKey - GEMINI_API_KEY
+ * @returns Parsed civic data object, or throws on failure
+ */
+async function fetchUSDataFromGemini(
+  location: string,
+  geminiKey: string
+): Promise<Record<string, unknown>> {
+  const genAI = new GoogleGenerativeAI(geminiKey);
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.0-flash',
+    safetySettings: [
+      { category: 'HARM_CATEGORY_HARASSMENT' as any, threshold: 'BLOCK_NONE' as any },
+      { category: 'HARM_CATEGORY_HATE_SPEECH' as any, threshold: 'BLOCK_NONE' as any },
+      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT' as any, threshold: 'BLOCK_NONE' as any },
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT' as any, threshold: 'BLOCK_NONE' as any },
+    ],
+  });
+  const prompt = buildUSPrompt(location);
+  const result = await model.generateContent(prompt);
+  const rawText = result.response.text();
+  const jsonText = stripGeminiJson(rawText);
+  console.log(`[Civic Route] Gemini US raw (${rawText.length} chars) → stripped (${jsonText.length} chars)`);
+  return JSON.parse(jsonText) as Record<string, unknown>;
+}
 
 /**
  * Calls the Gemini API to generate structured election data for an Indian location.
@@ -419,6 +470,17 @@ router.get('/', validateAddress, async (req: Request, res: Response): Promise<vo
       const message = err.response?.data?.error?.message ?? 'Civic API request failed';
 
       if (status === 404) {
+        console.log(`[Civic Route] ► Civic API 404 for "${address}" — trying Gemini US fallback.`);
+        if (geminiKey) {
+          try {
+            const usData = await fetchUSDataFromGemini(address, geminiKey);
+            console.log(`[Civic Route] ✓ Gemini US fallback success for "${address}".`);
+            res.status(200).json({ gemininFallback: true, civicData: usData });
+            return;
+          } catch (geminiErr) {
+            console.warn('[Civic Route] ⚠ Gemini US fallback failed, trying elections list:', geminiErr);
+          }
+        }
         try {
           const electionsUrl = `${CIVIC_API_BASE}/elections`;
           const electionsResponse = await axios.get(electionsUrl, {
