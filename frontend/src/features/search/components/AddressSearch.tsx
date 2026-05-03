@@ -108,7 +108,7 @@ export const AddressSearch: React.FC<AddressSearchProps> = ({
 
         {/* Evaluator Helper Text */}
         <p className="address-search__helper" aria-hidden="true">
-          💡 Try this sample address: <strong>1600 Pennsylvania Ave NW, Washington, DC 20500</strong>
+          1600 Pennsylvania Ave NW, Washington, DC 20500
         </p>
 
         {/* Accessible error message via aria-live */}

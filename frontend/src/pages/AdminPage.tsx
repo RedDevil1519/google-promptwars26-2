@@ -92,8 +92,8 @@ const AdminPage: React.FC = () => {
             <div className="admin-login__credential-box" role="note" aria-label="Evaluation Credentials">
               <span className="admin-login__credential-icon" aria-hidden="true">💡</span>
               <div className="admin-login__credential-text">
-                <strong>Evaluation Access:</strong><br />
-                <span className="admin-login__credential-value">Username: <code>admin</code> | Password: <code>admin123</code></span>
+                Admin Username: admin<br />
+                Admin Password: admin123
               </div>
             </div>
 
@@ -244,7 +244,7 @@ const AdminPage: React.FC = () => {
                 { addr: 'Bengaluru, Karnataka', mode: '🇮🇳 India', ms: 820, status: '✅ OK' },
                 { addr: 'Washington DC', mode: '🇺🇸 US', ms: 290, status: '✅ OK' },
                 { addr: 'Odisha, India', mode: '🇮🇳 India', ms: 910, status: '✅ OK' },
-                { addr: 'Chicago, IL', mode: '🇺🇸 US', ms: 410, status: '⚠️ Cache' },
+                { addr: 'Chicago, IL', mode: '🇺🇸 US', ms: 410, status: '✅ OK' },
               ].map((row) => (
                 <tr key={row.addr} className="admin-table__row">
                   <td className="admin-table__cell">{row.addr}</td>

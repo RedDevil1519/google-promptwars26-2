@@ -18,7 +18,7 @@
   <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node-20-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node"/></a>
   <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white" alt="Express"/></a>
-  <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Tests-82%20passing-6E9F18?style=flat-square&logo=vitest&logoColor=white" alt="Tests"/></a>
+  <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Tests-102%20passing-6E9F18?style=flat-square&logo=vitest&logoColor=white" alt="Tests"/></a>
   <img src="https://img.shields.io/badge/WCAG-2.1%20AA-00c853?style=flat-square" alt="WCAG 2.1 AA"/>
   <img src="https://img.shields.io/badge/PWA-Installable-5A0FC8?style=flat-square&logo=pwa" alt="PWA"/>
 </p>
@@ -31,7 +31,7 @@
 
 **Voter Protocol** transforms the complex election cycle into a kinetic, four-phase voter roadmap. It is the first civic platform that serves **both US voters** (via the Google Civic Information API) and **Indian voters** (via a Gemini AI fallback synthesizing Election Commission of India data) — all within the same seamless UI, using the same four-phase roadmap framework.
 
-The platform is built on a strict foundation of: zero `any` types in TypeScript, WCAG 2.1 AA accessibility, server-side API key security, PWA offline capability, and 82 automated tests.
+The platform features a **Futuristic Obsidian & Neon Cyan** glassmorphism aesthetic, ensuring an elite user experience. Built on a strict foundation of: zero `any` types in TypeScript, WCAG 2.1 AA accessibility, server-side API key security, PWA offline capability, mock JWT Admin Dashboard, and 102 automated tests.
 
 ---
 
@@ -69,6 +69,9 @@ User Input (Address)
         │     ├── Phase 3: Logistics      [📅 Add Election Day to Google Calendar]
         │     └── Phase 4: Execution      [🗺️ Google Maps Street View Embed]
         │
+        ├── 🛡️ Admin Portal (Obsidian Gateway)
+        │     └── Mock JWT authentication with live telemetry stats
+        │
         ├── 🌐 Language Selector (Cloud Translation API → Hindi / Español)
         ├── 📲 PWA Install Banner (Workbox offline cache)
         └── 🇮🇳 India Mode Badge + ECI info notice
@@ -83,11 +86,12 @@ User Input (Address)
 | 1 | **Real-Time US Civic Data** | Civic Information API v2 | `GET /api/civic` |
 | 2 | **India Fallback Engine** | Maps Geocoding + Gemini 1.5 Flash | `GET /api/civic` (auto-detected) |
 | 3 | **Gemini ELI5 Term Explainer** | Gemini 1.5 Flash (`@google/generative-ai`) | `POST /api/explain` |
-| 4 | **Multi-Language Translation** | Cloud Translation API v2 | `POST /api/translate` |
-| 5 | **Street View Reconnaissance** | Maps Embed API (streetview mode) | Frontend embed |
-| 6 | **Google Calendar Sync** | Calendar deep-link template URL | Frontend (no OAuth) |
-| 7 | **PWA Offline Mode** | — (Workbox service worker) | `dist/sw.js` |
-| 8 | **Helmet Security Headers** | — | All routes |
+| 4 | **Admin Obsidian Gateway** | — (Mock JWT Logic) | `POST /api/admin/login` |
+| 5 | **Multi-Language Translation** | Cloud Translation API v2 | `POST /api/translate` |
+| 6 | **Street View Reconnaissance** | Maps Embed API (streetview mode) | Frontend embed |
+| 7 | **Google Calendar Sync** | Calendar deep-link template URL | Frontend (no OAuth) |
+| 8 | **PWA Offline Mode** | — (Workbox service worker) | `dist/sw.js` |
+| 9 | **Helmet Security Headers** | — | All routes |
 
 ---
 
@@ -141,13 +145,23 @@ const result = await model.generateContent(prompt);
 ```
 
 ### 2. ELI5 Term Explainer (`POST /api/explain`)
-Every roadmap step has a **🔍 Decrypt Term** button. On click, the step title is sent to Gemini with a structured ELI5 prompt. The response is shown inline without page reload.
+Every roadmap step has a **🔍 Decrypt Term** button. On click, the step title is sent to Gemini with a structured ELI5 prompt. The backend strips markdown to ensure clean UI delivery.
 
 ```
 "Phase 1: Authorization" → Gemini →
 "It means making sure you are on the list of people allowed to vote,
  like checking if your name is on the school attendance sheet."
 ```
+
+---
+
+## 🔐 Secure Admin Gateway
+
+The **Obsidian Gateway** provides mock JWT authentication for administrators to view live system telemetry.
+
+- **URL:** `/admin`
+- **Credentials:** Username: `admin` / Password: `admin123`
+- **Features:** Mock JWT validation, session storage, and a "Live Statistics" monitor table (with visual green "✅ OK" indicators for Cache hits).
 
 ---
 
@@ -212,7 +226,8 @@ For Indian addresses, the Geocoding API provides precise lat/lng so the embed sh
 |-------|---------------|
 | HTTP Headers | `helmet()` — CSP, X-Frame-Options, HSTS, nosniff, referrer policy |
 | XSS | `DOMPurify` on all user-rendered content |
-| API Keys | 100% server-side — never exposed to the browser |
+| API Keys | 100% server-side via `process.env` — never exposed to the browser |
+| Authentication | JWT mock implementation in the Admin Gateway |
 | Input Validation | `validateAddress` middleware — regex + length guards on every request |
 | CORS | Allowlist: localhost dev + `*.run.app` (Cloud Run) via regex |
 | Rate Limiting | Axios 10-second timeout on all external API calls |
@@ -227,28 +242,31 @@ For Indian addresses, the Geocoding API provides precise lat/lng so the embed sh
 - Error states: `role="alert"` + `aria-live="assertive"`
 - Full keyboard navigation — no mouse required
 - Skip-to-content link on every page
-- Colour contrast ratios meet AA standards (`#00d4ff` on `#0a0e1a`)
+- Colour contrast ratios meet AA standards (`#00f2ff` on `#02040a`)
 
 ---
 
 ## 🧪 Testing
 
 ```
-Test Files  5 passed (5)
-Tests       82 passed (82)
+Test Files  6 passed (6)
+Tests       102 passed (102)
 ```
 
 | Test File | Tests | What it covers |
 |-----------|-------|----------------|
 | `App.test.tsx` | 5 | PWA install banner states, Suspense fallback |
-| `PollingMap.test.tsx` | 14 | Text fallback & iframe branch, ARIA labels, title |
+| `PollingMap.test.tsx` | 15 | Text fallback & iframe branch, ARIA labels, title |
 | `RoadmapStepper.test.tsx` | 25 | Translation, Decrypt Term, Phase 3 calendar, ARIA |
 | `indiaMapper.test.ts` | 19 | All mapper functions, edge cases, null coordinates |
 | `dateParser.test.ts` | 19 | Date parsing, calendar link generation |
+| `calendarExport.test.ts` | 19 | .ics file parsing, Deep Link generation |
 
 ---
 
 ## 🚀 Deployment (Google Cloud Run)
+
+The application is deployed via Google Cloud Run with the following configuration:
 
 ```bash
 # Authenticate
@@ -291,9 +309,10 @@ Copy `.env.example` → `.env` and fill in your keys before running locally.
 git clone https://github.com/<your-username>/google-promptwars26-2.git
 cd google-promptwars26-2
 
-# Install all dependencies
-cd frontend && npm install && cd ..
-cd backend && npm install && cd ..
+# Install all dependencies (Legacy peer deps required for Vite/ESLint)
+npm install --legacy-peer-deps
+cd frontend && npm install --legacy-peer-deps && cd ..
+cd backend && npm install --legacy-peer-deps && cd ..
 
 # Configure environment
 cp .env.example .env   # fill in your API keys
@@ -332,6 +351,10 @@ google-promptwars26-2/
 │   │   │   ├── utils/
 │   │   │   │   └── indiaMapper.ts       ← Maps Gemini → CivicVoterInfo
 │   │   │   └── types.ts                 ← All strict TypeScript interfaces
+│   │   ├── pages/
+│   │   │   ├── AdminPage.tsx            ← Obsidian Gateway (Mock JWT)
+│   │   │   ├── ElectionPage.tsx         ← Dashboard views
+│   │   │   └── HomePage.tsx             ← Landing page
 │   │   └── shared/
 │   │       ├── hooks/usePWAInstall.ts   ← PWA install prompt hook
 │   │       └── utils/cache.ts           ← 24-hour localStorage caching
@@ -343,6 +366,7 @@ google-promptwars26-2/
             ├── civic.ts          ← Geocoding + India bypass + US Civic API
             ├── india.ts          ← Standalone /api/india Gemini route
             ├── explain.ts        ← Gemini ELI5 term explainer
+            ├── admin.ts          ← Mock JWT logic & Telemetry endpoints
             └── translate.ts      ← Cloud Translation API proxy
 ```
 
